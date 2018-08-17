@@ -113,7 +113,7 @@ class Login extends React.Component{
 
   }
 
-  submitLogin(){
+  submitLogin(){    
     const log_email = $('#log_email').val();
     const log_password = $('#log_password').val();
 
