@@ -26,5 +26,5 @@ Route::group(['middleware' => 'web', 'prefix' => 'api'], function () {
     Route::post('/check','Auth\LoginController@check');
 });
 
-Route::post('internal-document','Controller@internalDocument');
-Route::post('load-folder','Controller@load');
+// Route::post('internal-document','Controller@internalDocument');
+// Route::post('load-folder','Controller@load');

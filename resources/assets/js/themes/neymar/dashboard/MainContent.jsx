@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route,Router} from "react-router-dom";
+import {Route,Router,Switch} from "react-router-dom";
 
 import route from '../configs/route';
 
@@ -55,8 +55,7 @@ const DiscussPage = ({ match} )=>(
 export default class MainContent extends React.Component{
   render(){
     return(
-      <div>
-        <div>
+      <Switch>
 
           <Route path={route.base + route.nav.my_class} component={MyClassComponent} />
 
@@ -74,8 +73,10 @@ export default class MainContent extends React.Component{
           <Route path={route.base + route.nav.channel_settings.base} component={ChannelSettingsPage} />
 
           <Route path={route.base + route.account_menu.base + route.account_menu.profile} component={ProfileComponent}/>
-        </div>
-      </div>
+
+          <Route component={MyClassComponent} />
+
+      </Switch>
     )
   }
 }

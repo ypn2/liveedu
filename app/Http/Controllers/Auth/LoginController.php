@@ -48,7 +48,7 @@ class LoginController extends Controller
     {
 
       $data = Input::all();
-
+      
       $validator = $this->validator($data);
       if($validator->fails()){
         return json_encode([

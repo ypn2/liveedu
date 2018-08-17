@@ -24,6 +24,9 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Collapse from '@material-ui/core/Collapse';
 
+
+import * as Actions from '../../actions/ActionsLogin';
+
 import axios from 'axios';
 
 const styles = {
@@ -100,7 +103,9 @@ class Login extends React.Component{
       reg_retype_password
     })
     .then(function(response){
-
+      if(response.data=='success'){
+        //Actions.loginSuccess();
+      }
     })
     .catch(function(err){
 
@@ -117,7 +122,10 @@ class Login extends React.Component{
       log_password
     })
     .then(function(response){
-      
+      console.log('#login:' + response.data);
+      if(response.data=='success'){
+        Actions.loginSuccess();
+      }
     })
     .catch(function(err){
 
@@ -170,7 +178,8 @@ class Login extends React.Component{
         <div className={classes.content}>
         <Grid container spacing={16}>
           <Grid item xs={8}>
-            <iframe width="100%" height="450" src="https://www.youtube.com/embed/lPqmbx7y8_g" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
+          <iframe width="100%" height="450" src="https://www.youtube.com/embed/lPqmbx7y8_g" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
+
           </Grid>
           <Grid item xs={4}>
           <Card className={classes.card}>
@@ -185,10 +194,6 @@ class Login extends React.Component{
                 <InputLabel htmlFor="input-with-icon-adornment">Họ</InputLabel>
                 <Input
                   id="reg_first_name"
-                  startAdornment={
-                    <InputAdornment position="start">
-                    </InputAdornment>
-                  }
                 />
               </FormControl>
 
@@ -196,10 +201,6 @@ class Login extends React.Component{
                 <InputLabel htmlFor="input-with-icon-adornment">Tên</InputLabel>
                 <Input
                   id="reg_last_name"
-                  startAdornment={
-                    <InputAdornment position="start">
-                    </InputAdornment>
-                  }
                 />
               </FormControl>
               <br/><br/>
