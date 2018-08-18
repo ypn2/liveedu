@@ -1,7 +1,14 @@
 import dispatcher from '../dispatcher/dispatcher';
 
-export function loginSuccess(){
+export function loginSuccess(status){
   dispatcher.dispatch({
-    type:'LOGIN_SUCCESS'
+    type:'EVENT_LOGIN',
+    status
+  })
+}
+
+export function logout(){
+  dispatcher.dispatch({
+    type:'EVENT_LOGOUT',
   })
 }

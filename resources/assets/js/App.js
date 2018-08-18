@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 
 import { loadProgressBar } from 'axios-progress-bar';
+import axios from 'axios';
 import 'axios-progress-bar/dist/nprogress.css';
 
 loadProgressBar(
@@ -34,7 +35,7 @@ import './App.css';
 import Login from './themes/neymar/Login';
 import FrontendMaster from './themes/neymar/frontend_pages/FrontendMaster';
 import ThemeRoot from './themes/neymar/dashboard/ThemeRoot';
-
+import AttemtLogin from './themes/neymar/LoginAttempt';
 import StoresLogin from './stores/StoresLogin';
 
 
@@ -44,18 +45,38 @@ import StoresLogin from './stores/StoresLogin';
 // 3. Log in
 // 4. Click the back button, note the URL each time
 
-const App = () => (
-  <Router>
-    <Switch>
-      <Route path="/login" component={LoginPage} />
-      <PrivateRoute path="/trainer-management" component={ThemeRoot} />
-      <PrivateRoute component={FrontendMaster} />
-    </Switch>
-  </Router>
-);
+
+
+class App extends React.Component{
+
+  constructor(){
+    super();
+
+    this.state= {
+      checkAuth:true
+    }
+  }
+
+  render(){
+    return(
+      <Router>
+        {
+          this.state.checkAuth ?(
+            <Switch>
+              <Route path="/trainer-management" component={LoginAttemptPage} />
+              <Route component={FrontendMaster} />
+            </Switch>
+          ):
+            <Route component={LoginPage} />
+        }
+
+      </Router>
+    )
+  }
+}
 
 const fakeAuth = {
-  isAuthenticated: false,
+  isAuthenticated: true,
   authenticate(cb) {
     this.isAuthenticated = true;
     setTimeout(cb, 100); // fake async
@@ -84,30 +105,32 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
   />
 );
 
-const Public = () => <h3>Public</h3>;
-const Protected = () => <h3>Protected</h3>;
+const LoginAttemptPage = () => (<AttemtLogin/>)
 
 class LoginPage extends React.Component {
 
   constructor(){
     super();
     this.state = {
-      redirectToReferrer: false
+      redirectToReferrer: false,
+      attemptLogin:false
     };
-
-
   }
 
   componentDidMount(){
     var _self = this;
-
-    StoresLogin.on('LOGIN_SUCCESS',function(){
-      fakeAuth.authenticate(() => {
-        _self.setState({ redirectToReferrer: true });
-      });
+    StoresLogin.once('EVENT_LOGIN',function(data){    
+      if(data.status == 'success'){
+        fakeAuth.authenticate(() => {
+          _self.setState({ redirectToReferrer: true });
+        });
+      }else{
+        _self.setState({
+          attemptLogin:true
+        })
+      }
     });
   }
-
 
   render() {
     const { from } = this.props.location.state || { from: { pathname: "/" } };
@@ -116,9 +139,15 @@ class LoginPage extends React.Component {
     if (redirectToReferrer) {
       return <Redirect to={from} />;
     }
-
     return (
-      <Login/>
+      <div>
+        {
+          !this.state.attemptLogin ?
+            <Login/>
+          :<LoginAttemptPage/>
+        }
+      </div>
+
     );
   }
 }

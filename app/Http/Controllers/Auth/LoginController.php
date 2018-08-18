@@ -49,8 +49,6 @@ class LoginController extends Controller
 
       $data = Input::all();
 
-      return 'success';
-
       $validator = $this->validator($data);
       if($validator->fails()){
         return json_encode([
@@ -79,5 +77,11 @@ class LoginController extends Controller
       }
 
       return 0;
+    }
+
+    public function Logout(){
+      if(Auth::check()){
+        Auth::logout();
+      }
     }
 }

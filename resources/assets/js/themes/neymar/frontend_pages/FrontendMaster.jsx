@@ -21,6 +21,9 @@ import Avatar from '@material-ui/core/Avatar';
 import SearchBar from 'material-ui-search-bar';
 import {NavLink} from "react-router-dom";
 import Notifications from '@material-ui/icons/Notifications';
+import axios from 'axios';
+
+import * as ActionsLogin from '../../../actions/ActionsLogin';
 
 
 import MainContent from './MainContent';
@@ -109,6 +112,18 @@ class FrontendMaster extends React.Component {
     this.setState({ anchorEl: null });
   };
 
+  handleLogout(){
+    this.setState({ anchorEl: null });
+    axios.post('/api/logout')
+    .then(function(response){
+      ActionsLogin.logout();
+    })
+    .catch(function(err){
+
+    })
+
+  }
+
   render() {
     const { classes } = this.props;
     const { auth, anchorEl ,list,listBlogs} = this.state;
@@ -162,7 +177,7 @@ class FrontendMaster extends React.Component {
                   onClose={this.handleClose.bind(this)}
                 >
                   <NavLink to="/trainer-management" onClick={this.handleClose.bind(this)}><MenuItem >Cá nhân</MenuItem></NavLink>
-                  <NavLink to="/login"  onClick={this.handleClose.bind(this)}><MenuItem>Đăng xuất</MenuItem></NavLink>
+                  <MenuItem onClick={this.handleLogout.bind(this)}>Đăng xuất</MenuItem>
                 </Menu>
               </div>
             )}

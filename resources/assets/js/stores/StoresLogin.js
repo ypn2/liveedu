@@ -5,14 +5,21 @@ import axios from 'axios';
 
 class Stores extends EventEmitter {
 
-  loginSuccess(){
-    this.emit('LOGIN_SUCCESS');
+  loginSuccess(status){
+    this.emit('EVENT_LOGIN',{status});
   }
 
-  handleAction(actions){
-    switch (actions.type) {
-      case 'LOGIN_SUCCESS':
-        this.loginSuccess();
+  logout(){  
+    this.emit('EVENT_LOGOUT');
+  }
+
+  handleAction(action){
+    switch (action.type) {
+      case 'EVENT_LOGIN':
+        this.loginSuccess(action.status);
+        break;
+      case 'EVENT_LOGOUT':
+        this.logout();
         break;
       default:
     }

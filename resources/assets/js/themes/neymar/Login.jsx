@@ -113,7 +113,13 @@ class Login extends React.Component{
 
   }
 
-  submitLogin(){    
+  handleEnterPress(e){
+    if (e.key === 'Enter') {
+      this.submitLogin();
+    }
+  }
+
+  submitLogin(){
     const log_email = $('#log_email').val();
     const log_password = $('#log_password').val();
 
@@ -123,9 +129,7 @@ class Login extends React.Component{
     })
     .then(function(response){
       console.log('#login:' + response.data);
-      if(response.data=='success'){
-        Actions.loginSuccess();
-      }
+      Actions.loginSuccess(response.data);
     })
     .catch(function(err){
 
@@ -151,6 +155,7 @@ class Login extends React.Component{
                   id="log_email"
                   placeholder='Email'
                   type="email"
+                  name="log_email"
                   className={classes.input_login}
 
                 />
@@ -158,6 +163,8 @@ class Login extends React.Component{
                   id="log_password"
                   type="password"
                   placeholder='Mật khẩu'
+                  name="log_password"
+                  onKeyPress={this.handleEnterPress.bind(this)}
                   className={classes.input_login}
                 />
               <Button onClick={this.submitLogin} variant="contained" size="small" color="default"
@@ -205,7 +212,7 @@ class Login extends React.Component{
               </FormControl>
               <br/><br/>
               <FormControl className={classes.input}>
-                  <InputLabel htmlFor="input-with-icon-adornment">Email</InputLabel>
+                  <InputLabel htmlFor="reg_email">Email</InputLabel>
                   <Input
                     id="reg_email"
                     type="email"
@@ -219,7 +226,7 @@ class Login extends React.Component{
               </FormControl><br/><br/>
 
               <FormControl className={classes.input}>
-                <InputLabel htmlFor="input-with-icon-adornment">Mật khẩu</InputLabel>
+                <InputLabel htmlFor="reg_password">Mật khẩu</InputLabel>
                 <Input
                   id="reg_password"
                   type="password"
