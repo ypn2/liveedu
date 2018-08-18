@@ -51,24 +51,16 @@ class App extends React.Component{
 
   constructor(){
     super();
-
-    this.state= {
-      checkAuth:true
-    }
   }
 
   render(){
     return(
       <Router>
-        {
-          this.state.checkAuth ?(
-            <Switch>
-              <Route path="/trainer-management" component={LoginAttemptPage} />
-              <Route component={FrontendMaster} />
-            </Switch>
-          ):
-            <Route component={LoginPage} />
-        }
+        <Switch>
+          <Route path="/login" component={LoginPage} />
+          <Route path="/trainer-management" component={LoginAttemptPage} />
+          <Route component={FrontendMaster} />
+        </Switch>
 
       </Router>
     )
@@ -119,7 +111,7 @@ class LoginPage extends React.Component {
 
   componentDidMount(){
     var _self = this;
-    StoresLogin.once('EVENT_LOGIN',function(data){    
+    StoresLogin.once('EVENT_LOGIN',function(data){
       if(data.status == 'success'){
         fakeAuth.authenticate(() => {
           _self.setState({ redirectToReferrer: true });
