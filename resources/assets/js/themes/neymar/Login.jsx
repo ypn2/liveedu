@@ -23,6 +23,7 @@ import logo from '../../logo.svg';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Collapse from '@material-ui/core/Collapse';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 
 import * as Actions from '../../actions/ActionsLogin';
@@ -77,7 +78,27 @@ class Login extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      checked:false
+      checked:false,
+      error_reg_first_name:{
+        status:false,
+        message:''
+      },
+      error_reg_last_name:{
+        status:false,
+        message:''
+      },
+      error_reg_email:{
+        status:false,
+        message:''
+      },
+      error_reg_password:{
+        status:false,
+        message:''
+      },
+      error_reg_retype_password:{
+        status:false,
+        message:''
+      }
     }
   }
 
@@ -104,9 +125,58 @@ class Login extends React.Component{
     })
     .then(function(response){
       if(response.data=='success'){
-        //Actions.loginSuccess();
+        Actions.loginSuccess(response.data);
+      }else{
+        var _mess = response.data.message;
+
+        if('reg_first_name' in _mess){
+          this.setState({
+            error_reg_first_name:{
+              status:true,
+              message:_mess.reg_first_name
+            }
+          });
+        }
+
+        if('reg_last_name' in _mess){
+          this.setState({
+            error_reg_last_name:{
+              status:true,
+              message:_mess.reg_last_name
+            }
+          });
+        }
+
+        if('email' in _mess){
+          this.setState({
+            error_reg_email:{
+              status:true,
+              message:_mess.email
+            }
+          });
+
+        }
+
+        if('reg_password' in _mess){
+          this.setState({
+            error_reg_password:{
+              status:true,
+              message:_mess.reg_password
+            }
+          });
+        }
+
+        if('reg_retype_password' in _mess){
+          this.setState({
+            error_reg_retype_password:{
+              status:true,
+              message:_mess.reg_retype_password
+            }
+          });
+        }
+
       }
-    })
+    }.bind(this))
     .catch(function(err){
 
     });
@@ -128,7 +198,7 @@ class Login extends React.Component{
       log_password
     })
     .then(function(response){
-      console.log('#login:' + response.data);
+      console.log(response.data);
       Actions.loginSuccess(response.data);
     })
     .catch(function(err){
@@ -186,7 +256,6 @@ class Login extends React.Component{
         <Grid container spacing={16}>
           <Grid item xs={8}>
           <iframe width="100%" height="450" src="https://www.youtube.com/embed/lPqmbx7y8_g" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
-
           </Grid>
           <Grid item xs={4}>
           <Card className={classes.card}>
@@ -197,21 +266,32 @@ class Login extends React.Component{
                 </Typography>
               </div>
 
-              <FormControl style={{width:'48%'}}>
-                <InputLabel htmlFor="input-with-icon-adornment">Họ</InputLabel>
+              <FormControl style={{width:'48%'}} error={this.state.error_reg_first_name.status?true:false}>
+                <InputLabel htmlFor="firstname-error-text">Họ</InputLabel>
                 <Input
                   id="reg_first_name"
+                  type="text"
+                  name="reg_first_name"
                 />
+              {
+                this.state.error_reg_first_name.status ? <FormHelperText id="firstname-error-text">{this.state.error_reg_first_name.message}</FormHelperText> :null
+              }
+
               </FormControl>
 
-              <FormControl style={{width:'48%',float:'right'}}>
+              <FormControl style={{width:'48%',float:'right'}} error={this.state.error_reg_last_name.status?true:false}>
                 <InputLabel htmlFor="input-with-icon-adornment">Tên</InputLabel>
                 <Input
                   id="reg_last_name"
+                  type="text"
+                  name="reg_last_name"
                 />
+                {
+                  this.state.error_reg_last_name.status ? <FormHelperText id="firstname-error-text">{this.state.error_reg_last_name.message}</FormHelperText> :null
+                }
               </FormControl>
               <br/><br/>
-              <FormControl className={classes.input}>
+              <FormControl className={classes.input} error={this.state.error_reg_email.status?true:false}>
                   <InputLabel htmlFor="reg_email">Email</InputLabel>
                   <Input
                     id="reg_email"
@@ -223,9 +303,13 @@ class Login extends React.Component{
                       </InputAdornment>
                     }
                   />
+                {
+                  this.state.error_reg_email.status ? <FormHelperText id="email-error-text">{this.state.error_reg_email.message}</FormHelperText> :null
+                }
+
               </FormControl><br/><br/>
 
-              <FormControl className={classes.input}>
+            <FormControl className={classes.input} error={this.state.error_reg_password.status?true:false}>
                 <InputLabel htmlFor="reg_password">Mật khẩu</InputLabel>
                 <Input
                   id="reg_password"
@@ -237,9 +321,12 @@ class Login extends React.Component{
                     </InputAdornment>
                   }
                 />
+                {
+                  this.state.error_reg_password.status ? <FormHelperText id="email-error-text">{this.state.error_reg_password.message}</FormHelperText> :null
+                }
             </FormControl><br/><br/>
 
-              <FormControl className={classes.input}>
+          <FormControl className={classes.input} error={this.state.error_reg_retype_password.status?true:false}>
                   <InputLabel htmlFor="input-with-icon-adornment">Nhập lại mật khẩu</InputLabel>
                   <Input
                     id="reg_retype_password"
@@ -251,7 +338,10 @@ class Login extends React.Component{
                       </InputAdornment>
                     }
                   />
-              </FormControl><br/><br/>
+                {
+                  this.state.error_reg_retype_password.status ? <FormHelperText id="email-error-text">{this.state.error_reg_retype_password.message}</FormHelperText> :null
+                }
+            </FormControl><br/><br/>
 
             <FormControlLabel
               control={
@@ -301,7 +391,7 @@ class Login extends React.Component{
 
             </CardContent>
             <CardActions>
-              <Button onClick={this.submitRegister} variant="contained" size="small" color="primary">
+              <Button onClick={this.submitRegister.bind(this)} variant="contained" size="small" color="primary">
                 Đăng ký
               </Button>
             </CardActions>

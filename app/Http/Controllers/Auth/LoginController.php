@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Auth;
+use App\User;
 
 class LoginController extends Controller
 {
@@ -57,6 +58,24 @@ class LoginController extends Controller
         ]);
       }
 
+      if ( ! User::where('email',$data['log_email'])->first() ) {
+        return json_encode([
+          'code'=>'301',
+          'message'=>[
+            'log_email'=>'Email chưa được đăng ký'
+          ]
+        ]);
+      }
+
+      if ( ! User::where('email', $data['log_password'])->where('password', bcrypt($data['log_password']))->first() ) {
+        return json_encode([
+          'code'=>'301',
+          'message'=>[
+            'log_password'=>'Mật khẩu đăng nhập không đúng'
+          ]
+        ]);
+      }
+
       if (Auth::attempt(
         [
           'email' => $data['log_email'],
@@ -82,6 +101,11 @@ class LoginController extends Controller
     public function Logout(){
       if(Auth::check()){
         Auth::logout();
+          return 1;
       }
+
+      return 0;
+
     }
+
 }

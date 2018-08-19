@@ -116,7 +116,9 @@ class FrontendMaster extends React.Component {
     this.setState({ anchorEl: null });
     axios.post('/api/logout')
     .then(function(response){
-      ActionsLogin.logout();
+      if(response.data ==1){
+          ActionsLogin.logout();
+      }
     })
     .catch(function(err){
 

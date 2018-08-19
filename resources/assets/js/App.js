@@ -51,96 +51,70 @@ class App extends React.Component{
 
   constructor(){
     super();
-  }
 
-  render(){
-    return(
-      <Router>
-        <Switch>
-          <Route path="/login" component={LoginPage} />
-          <Route path="/trainer-management" component={LoginAttemptPage} />
-          <Route component={FrontendMaster} />
-        </Switch>
-
-      </Router>
-    )
-  }
-}
-
-const fakeAuth = {
-  isAuthenticated: true,
-  authenticate(cb) {
-    this.isAuthenticated = true;
-    setTimeout(cb, 100); // fake async
-  },
-  signout(cb) {
-    this.isAuthenticated = false;
-    setTimeout(cb, 100);
-  }
-};
-
-const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={props =>
-      fakeAuth.isAuthenticated ? (
-        <Component {...props} />
-      ) : (
-        <Redirect
-          to={{
-            pathname: "/login",
-            state: { from: props.location }
-          }}
-        />
-      )
-    }
-  />
-);
-
-const LoginAttemptPage = () => (<AttemtLogin/>)
-
-class LoginPage extends React.Component {
-
-  constructor(){
-    super();
     this.state = {
-      redirectToReferrer: false,
+      authenticate:false,
       attemptLogin:false
-    };
+    }
+
   }
 
-  componentDidMount(){
+  componentWillMount(){
+
     var _self = this;
-    StoresLogin.once('EVENT_LOGIN',function(data){
+
+    axios.post('/api/check')
+    .then(function(response){
+      if(response.data ==1 ){
+        _self.setState({
+          authenticate:true
+        })
+      }
+    })
+    .catch(function(err){
+
+    })
+
+
+    StoresLogin.on('EVENT_LOGIN',function(data){
       if(data.status == 'success'){
-        fakeAuth.authenticate(() => {
-          _self.setState({ redirectToReferrer: true });
-        });
+        _self.setState({
+          authenticate:true
+        })
       }else{
         _self.setState({
           attemptLogin:true
         })
       }
     });
-  }
 
-  render() {
-    const { from } = this.props.location.state || { from: { pathname: "/" } };
-    const { redirectToReferrer } = this.state;
+    StoresLogin.on('EVENT_LOGOUT',function(){
+      _self.setState({
+        authenticate:false
+      })
+    })
 
-    if (redirectToReferrer) {
-      return <Redirect to={from} />;
-    }
-    return (
+  }  
+
+  render(){
+
+    const _log = this.state.attemptLogin ? <AttemtLogin/> : <Login/>;
+
+
+    return(
       <div>
         {
-          !this.state.attemptLogin ?
-            <Login/>
-          :<LoginAttemptPage/>
+            !this.state.authenticate ? _log :(
+            <Router>
+              <Switch>
+                <Route path="/trainer-management" component={ThemeRoot} />
+                <Route component={FrontendMaster} />
+              </Switch>
+            </Router>
+          )
         }
       </div>
-
-    );
+    )
   }
 }
 
