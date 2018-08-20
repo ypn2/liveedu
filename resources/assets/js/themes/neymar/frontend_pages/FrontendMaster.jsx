@@ -150,7 +150,7 @@ class FrontendMaster extends React.Component {
                 height:32
               }}
             />
-          <NavLink to="/trainers" className={classes.topLink}><Button color="inherit">Giảng viên</Button></NavLink>
+          <NavLink to="/stream-registration" className={classes.topLink}><Button color="inherit">Đăng ký stream partner</Button></NavLink>
             <NavLink to="/courses" className={classes.topLink}><Button color="inherit">Khóa học</Button></NavLink>
             <NavLink to="/posts" className={classes.topLink}><Button color="inherit">Blogs</Button></NavLink>
             <IconButton><Notifications style={{color:'#fff'}}/></IconButton>

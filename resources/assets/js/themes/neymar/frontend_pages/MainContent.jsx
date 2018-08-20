@@ -4,7 +4,7 @@ import {Route,Switch,Redirect} from "react-router-dom";
 import HomeMaster from './homepage/HomeMaster';
 import BlogMaster from './blog/BlogMaster';
 import CourseMaster from './course/CourseMaster';
-import LiveMaster from './live/LiveMaster';
+import StreamRegistrationMaster from './stream_registration/StreamRegistrationMaster';
 import PostDetail from './blog/post/PostMaster';
 import CourseDetail from './course_detail/CourseDetail';
 import ChannelMaster from './channel/ChannelMaster';
@@ -37,6 +37,10 @@ const ChannelComponent = ()=>(
   <ChannelMaster/>
 )
 
+const StreamRegistrationPage = ()=>(
+  <StreamRegistrationMaster/>
+)
+
 export default class  MainContent extends React.Component{
   render(){
     return(
@@ -45,7 +49,7 @@ export default class  MainContent extends React.Component{
         <Route path="/p" component={PostDetailPage}/>
         <Route path="/courses" component={CourseMasterPage} />
         <Route path="/course_detail" component={CourseDetailPage} />
-        <Route path="/trainers" component={ListTrainersMasterPage} />
+        <Route path="/stream-registration" component={StreamRegistrationPage} />
         <Route path="/channel" component={ChannelComponent} />
         <Route component={HomeMaster} />
       </Switch>
