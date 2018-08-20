@@ -153,7 +153,7 @@ class HomeMaster extends React.Component{
 
                       <Divider style={{marginTop:15,marginBottom:15}} inset />
                       <div>
-                        <NavLink to="/fr/channel"><Button style={{marginRight:15}} size="small" variant="contained" color="primary">Vào học</Button></NavLink>
+                        <NavLink to="/channel"><Button style={{marginRight:15}} size="small" variant="contained" color="primary">Vào học</Button></NavLink>
                         <Button size="small" variant="contained" color="secondary">Mua khóa học</Button>
                       </div>
                     </div>
@@ -193,7 +193,7 @@ class HomeMaster extends React.Component{
                          subheader="September 14, 2016"
                        />
 
-                      <NavLink to="/fr/course_detail">
+                      <NavLink to="/course_detail">
                          <CardMedia
                            className={classes.media}
                            image="https://material-ui.com/static/images/cards/paella.jpg"

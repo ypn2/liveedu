@@ -53,7 +53,7 @@ class App extends React.Component{
     super();
 
     this.state = {
-      authenticate:false,
+      authenticate:null,
       attemptLogin:false
     }
 
@@ -65,14 +65,12 @@ class App extends React.Component{
 
     axios.post('/api/check')
     .then(function(response){
-      if(response.data ==1 ){
-        _self.setState({
-          authenticate:true
-        })
-      }
+      _self.setState({
+        authenticate:response.data
+      })
     })
     .catch(function(err){
-
+      
     })
 
 
@@ -83,7 +81,8 @@ class App extends React.Component{
         })
       }else{
         _self.setState({
-          attemptLogin:true
+          attemptLogin:true,
+          authenticate:false
         })
       }
     });
@@ -94,26 +93,32 @@ class App extends React.Component{
       })
     })
 
-  }  
+  }
 
   render(){
 
     const _log = this.state.attemptLogin ? <AttemtLogin/> : <Login/>;
 
-
     return(
       <div>
         {
-            !this.state.authenticate ? _log :(
-            <Router>
-              <Switch>
-                <Route path="/trainer-management" component={ThemeRoot} />
-                <Route component={FrontendMaster} />
-              </Switch>
-            </Router>
-          )
+          this.state.authenticate!=null ?
+          <div>
+            {
+                !this.state.authenticate ? _log :(
+                <Router>
+                  <Switch>
+                    <Route path="/trainer-management" component={ThemeRoot} />
+                    <Route component={FrontendMaster} />
+                  </Switch>
+                </Router>
+              )
+            }
+          </div>
+          : null
         }
       </div>
+
     )
   }
 }

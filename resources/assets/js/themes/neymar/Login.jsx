@@ -73,32 +73,22 @@ const styles = {
   icon:{color:'#aaa'}
 };
 
+const _dfState = {
+  status:false,
+  message:''
+}
+
 
 class Login extends React.Component{
   constructor(props){
     super(props);
     this.state={
       checked:false,
-      error_reg_first_name:{
-        status:false,
-        message:''
-      },
-      error_reg_last_name:{
-        status:false,
-        message:''
-      },
-      error_reg_email:{
-        status:false,
-        message:''
-      },
-      error_reg_password:{
-        status:false,
-        message:''
-      },
-      error_reg_retype_password:{
-        status:false,
-        message:''
-      }
+      error_reg_first_name:_dfState,
+      error_reg_last_name:_dfState,
+      error_reg_email:_dfState,
+      error_reg_password:_dfState,
+      error_reg_retype_password:_dfState
     }
   }
 
@@ -109,7 +99,20 @@ class Login extends React.Component{
     });
   }
 
+  resetState(){
+    this.setState({
+      error_reg_first_name:_dfState,
+      error_reg_last_name:_dfState,
+      error_reg_email:_dfState,
+      error_reg_password:_dfState,
+      error_reg_retype_password:_dfState
+    })
+  }
+
   submitRegister(){
+
+    this.resetState();
+
     const reg_first_name = $('#reg_first_name').val();
     const reg_last_name = $('#reg_last_name').val();
     const reg_email = $('#reg_email').val();
@@ -154,7 +157,6 @@ class Login extends React.Component{
               message:_mess.email
             }
           });
-
         }
 
         if('reg_password' in _mess){

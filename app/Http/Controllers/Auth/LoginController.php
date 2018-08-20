@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Validator;
 
+use Illuminate\Support\Facades\Hash;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Auth;
@@ -22,6 +24,9 @@ class LoginController extends Controller
     | to conveniently provide its functionality to your applications.
     |
     */
+
+
+    use AuthenticatesUsers;
 
     protected function validator(array $data)
     {
@@ -50,6 +55,7 @@ class LoginController extends Controller
 
       $data = Input::all();
 
+
       $validator = $this->validator($data);
       if($validator->fails()){
         return json_encode([
@@ -58,7 +64,9 @@ class LoginController extends Controller
         ]);
       }
 
-      if ( ! User::where('email',$data['log_email'])->first() ) {
+      $user = User::where('email',$data['log_email'])->first();
+
+      if(!$user){
         return json_encode([
           'code'=>'301',
           'message'=>[
@@ -67,11 +75,11 @@ class LoginController extends Controller
         ]);
       }
 
-      if ( ! User::where('email', $data['log_password'])->where('password', bcrypt($data['log_password']))->first() ) {
+      if(!Hash::check($data['log_password'], $user->password)){
         return json_encode([
           'code'=>'301',
           'message'=>[
-            'log_password'=>'Mật khẩu đăng nhập không đúng'
+            'log_password'=>'Mật khẩu bạn nhập chưa chính xác'
           ]
         ]);
       }
@@ -86,16 +94,15 @@ class LoginController extends Controller
         return 'success';
       }
 
-      return 'fails';
+      return json_encode([
+        'code'=>'301',
+        'message'=>'Lỗi chưa xác định'
+      ]);
 
     }
 
     public function check(){
-      if(Auth::check()){
-        return 1;
-      }
-
-      return 0;
+      return '' . Auth::check();
     }
 
     public function Logout(){
@@ -106,6 +113,27 @@ class LoginController extends Controller
 
       return 0;
 
+    }
+
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        $errors = [$this->username() => trans('auth.failed')];
+
+        // Load user from database
+        $user = User::where($this->username(), $request->{$this->username()})->first();
+
+        // Check if user was successfully loaded, that the password matches
+        // and active is not 1. If so, override the default error message.
+        if ($user && \Hash::check($request->password, $user->password) && $user->active != 1) {
+            $errors = [$this->username() => trans('auth.notactivated')];
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json($errors, 422);
+        }
+        return redirect()->back()
+            ->withInput($request->only($this->username(), 'remember'))
+            ->withErrors($errors);
     }
 
 }

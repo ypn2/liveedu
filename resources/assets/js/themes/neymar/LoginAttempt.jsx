@@ -67,23 +67,33 @@ const styles = {
   icon:{color:'#aaa'}
 };
 
+const _dfState = {
+  status:false,
+  message:''
+
+}
+
 
 class LoginAttempt extends React.Component{
   constructor(props){
     super(props);
-    this.state={
-      error_log_email:{
-        status:false,
-        message:''
-      },
-      error_log_email:{
-        status:false,
-        message:''
-      },
+    this.state= {
+      error_log_email:_dfState,
+      error_log_password:_dfState
     }
   }
 
+  resetState(){
+    this.setState({
+      error_log_email:_dfState,
+      error_log_password:_dfState
+    })
+  }
+
   submitLogin(){
+
+    this.resetState();
+
     const log_email = $('#log_email').val();
     const log_password = $('#log_password').val();
 
@@ -92,14 +102,41 @@ class LoginAttempt extends React.Component{
       log_password
     })
     .then(function(response){
-      console.log('#login:' + response.data);
+
       if(response.data=='success'){
-        Actions.loginSuccess();
+        Actions.loginSuccess(response.data);
+      }else{
+        var _mess = response.data.message;
+
+        if('log_email' in _mess){
+          this.setState({
+            error_log_email:{
+              status:true,
+              message:_mess.log_email
+            }
+          });
+        }
+
+        if('log_password' in _mess){
+          this.setState({
+            error_log_password:{
+              status:true,
+              message:_mess.log_password
+            }
+          });
+        }
+
       }
-    })
+    }.bind(this))
     .catch(function(err){
 
     });
+  }
+
+  handleEnterPress(e){
+    if (e.key === 'Enter') {
+      this.submitLogin();
+    }
   }
 
   render(){
@@ -127,39 +164,51 @@ class LoginAttempt extends React.Component{
             </CardHeader>
             <Divider/>
             <CardContent style={{padding:'30px 80px 0px'}}>
-              <FormControl className={classes.input} error aria-describedby="name-error-log-email">
+              <FormControl className={classes.input} error={this.state.error_log_email.status?true:false}>
                   <InputLabel htmlFor="reg_email">Email</InputLabel>
                   <Input
                     id="log_email"
                     type="email"
                     className={classes.input}
+                    onKeyPress={this.handleEnterPress.bind(this)}
                     startAdornment={
                       <InputAdornment position="start">
                         <i className="material-icons" style={{color:'#aaa'}}>email</i>
                       </InputAdornment>
                     }
                   />
-                <FormHelperText id="name-error-log-email">Emai đăng nhập không chính xác</FormHelperText>
+                {
+                  this.state.error_log_email.status ?
+                    <FormHelperText id="name-error-log-email">{this.state.error_log_email.message}</FormHelperText>
+                    : null
+                }
+
               </FormControl><br/><br/>
 
-            <FormControl className={classes.input}  error aria-describedby="name-error-log_password">
+            <FormControl className={classes.input}  error={this.state.error_log_password.status?true:false}>
                 <InputLabel htmlFor="reg_password">Mật khẩu</InputLabel>
                 <Input
                   id="log_password"
                   type="password"
                   className={classes.input}
+                  onKeyPress={this.handleEnterPress.bind(this)}
                   startAdornment={
                     <InputAdornment position="start">
                       <i className="material-icons" style={{color:'#aaa'}}>lock</i>
                     </InputAdornment>
                   }
                 />
-              <FormHelperText id="name-error-log_password">Mật khẩu đăng nhập không chính xác</FormHelperText>
+              {
+                this.state.error_log_password.status ?
+                 <FormHelperText id="name-error-log_password">{this.state.error_log_password.message}</FormHelperText>
+                 : null
+              }
+
             </FormControl><br/><br/>
         </CardContent>
 
         <CardActions style={{paddingLeft:80}}>
-          <Button variant="contained" size="small" color="primary">
+          <Button onClick={this.submitLogin.bind(this)} variant="contained" size="small" color="primary">
             Đăng nhập
           </Button>
         </CardActions>
