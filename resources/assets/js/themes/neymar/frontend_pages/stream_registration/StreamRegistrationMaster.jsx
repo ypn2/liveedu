@@ -219,6 +219,7 @@ class StreamRegistrationMaster extends React.Component{
                   <Typography variant="title">Giới thiệu về bản thân và kinh nghiệm</Typography>
                   <br/>
                   <TinyMCE
+                      id="own_introduce"
                       config={{
                         plugins: 'link image lists preview',
                         height:235

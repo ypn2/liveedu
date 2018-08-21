@@ -25,6 +25,8 @@ Route::group(['middleware' => 'web', 'prefix' => 'api'], function () {
     Route::post('/login','Auth\LoginController@login');
     Route::post('/logout','Auth\LoginController@logout');
     Route::post('/check','Auth\LoginController@check');
+
+    Route::post('/trainer-registration','TrainerController@register');
 });
 
 // Route::post('internal-document','Controller@internalDocument');
