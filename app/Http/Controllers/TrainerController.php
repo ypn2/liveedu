@@ -13,12 +13,13 @@ class TrainerController extends BaseController{
   |--------------------------------------------------------------------------
   | TrainerController Controller
   |--------------------------------------------------------------------------
-  |
   | Xử lý logic liên quan đến đăng ký streammer partner
-  | validation and creation. By default this controller uses a trait to
-  | provide this functionality without requiring any additional code.
-  |
   */
+
+  public function register(){
+    
+  }
+
 }
 
 ?>

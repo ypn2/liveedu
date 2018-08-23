@@ -37,6 +37,7 @@ import FrontendMaster from './themes/neymar/frontend_pages/FrontendMaster';
 import ThemeRoot from './themes/neymar/dashboard/ThemeRoot';
 import AttemtLogin from './themes/neymar/LoginAttempt';
 import StoresLogin from './stores/StoresLogin';
+import ThemeContext from './themes/neymar/configs/context';
 
 
 ////////////////////////////////////////////////////////////
@@ -53,6 +54,7 @@ class App extends React.Component{
     super();
 
     this.state = {
+      user:null,
       authenticate:null,
       attemptLogin:false
     }
@@ -65,12 +67,19 @@ class App extends React.Component{
 
     axios.post('/api/check')
     .then(function(response){
-      _self.setState({
-        authenticate:response.data
-      })
+      if(response.data!=0){
+        _self.setState({
+          user:response.data,
+          authenticate:true
+        })
+      }else{
+        _self.setState({
+          authenticate:false
+        })
+      }
     })
     .catch(function(err){
-      
+
     })
 
 
@@ -106,12 +115,15 @@ class App extends React.Component{
           <div>
             {
                 !this.state.authenticate ? _log :(
+
+              <ThemeContext.Provider value={{user:this.state.user}}>
                 <Router>
                   <Switch>
                     <Route path="/trainer-management" component={ThemeRoot} />
                     <Route component={FrontendMaster} />
                   </Switch>
                 </Router>
+              </ThemeContext.Provider>
               )
             }
           </div>
