@@ -6,6 +6,8 @@ use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\PartnerRegistration;
+
 class Partner extends Model
 {
     protected $table = '_liveedu_partners';
@@ -25,6 +27,11 @@ class Partner extends Model
         ]);
 
         if($result){
+
+          $user = Auth::user();          
+
+          $user->notify(new PartnerRegistration());
+
           return json_encode([
             'code'=>200,
             'status'=>'success',

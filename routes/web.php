@@ -37,6 +37,10 @@ Route::group(['middleware' => 'web', 'prefix' => 'api'], function () {
       Route::post('check','PartnerController@check');
     });
 
+    Route::group(['middleware'=>'web','prefix'=>'notification'],function(){
+      Route::post('get','NotificationController@get');
+    });
+
 });
 
 // Route::post('internal-document','Controller@internalDocument');
