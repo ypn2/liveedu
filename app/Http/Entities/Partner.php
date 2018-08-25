@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\PartnerRegistration;
+use App\Http\Entities\Channel;
+use App\Notifications\ActivePartner;
+use DB;
 
 class Partner extends Model
 {
@@ -28,7 +31,7 @@ class Partner extends Model
 
         if($result){
 
-          $user = Auth::user();          
+          $user = Auth::user();
 
           $user->notify(new PartnerRegistration());
 
@@ -77,6 +80,26 @@ class Partner extends Model
         'status'=>-1,
         'message'=>'Thành viên chưa đăng kí streammer partner'
       ]);
+    }
+
+    //Xác nhận đăng ký partner thành công
+    protected function activePartner($user_id){
+      $partner = $this->where('user_id',$user_id)->first();
+      $user = Auth::find($user_id);
+
+      if($partner && $user){
+
+        try{
+          DB:transaction(function(){
+            Channel::create($partner->id);
+            $partner->status = 1;
+            $partner->save();
+            $user->notify(new ActivePartner() );
+          });
+        }catch(QueryException $ex){
+
+        }
+      }
     }
 
 }

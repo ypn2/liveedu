@@ -35,6 +35,7 @@ Route::group(['middleware' => 'web', 'prefix' => 'api'], function () {
     Route::group(['middleware'=>'web','prefix'=>'partner'] , function(){
       Route::post('register','PartnerController@register');
       Route::post('check','PartnerController@check');
+      Route::post('active','PartnerController@activePartner');
     });
 
     Route::group(['middleware'=>'web','prefix'=>'notification'],function(){

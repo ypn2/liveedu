@@ -38,6 +38,7 @@ import ThemeRoot from './themes/neymar/dashboard/ThemeRoot';
 import AttemtLogin from './themes/neymar/LoginAttempt';
 import StoresLogin from './stores/StoresLogin';
 import ThemeContext from './themes/neymar/configs/context';
+import Personalize from './themes/neymar/personalize/PersonalizeMaster';
 
 
 ////////////////////////////////////////////////////////////

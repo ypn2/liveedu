@@ -44,6 +44,10 @@ class PartnerController extends BaseController{
     return Partner::check(Auth::id());
   }
 
+  public function activePartner($user_id){
+    return Partner::activePartner($user_id);
+  }
+
 }
 
 ?>
