@@ -6,6 +6,9 @@ import classNames from 'classnames';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Switch from '@material-ui/core/Switch';
@@ -22,6 +25,7 @@ import SearchBar from 'material-ui-search-bar';
 import {NavLink} from "react-router-dom";
 import Notifications from '@material-ui/icons/Notifications';
 import axios from 'axios';
+import Divider from '@material-ui/core/Divider';
 
 import * as ActionsLogin from '../../../actions/ActionsLogin';
 
@@ -94,9 +98,25 @@ class FrontendMaster extends React.Component {
 
     this.state = {
       auth: true,
-      anchorEl: null
+      anchorEl: null,
+      unread:0,
+      notifications:[],
+      anchorElNoti:null,
     };
 
+  }
+
+  componentWillMount(){
+    axios.post('/api/notification/get')
+    .then(function(response){
+        this.setState({
+          unread:response.data.unread,
+          notifications:response.data.all
+        })
+    }.bind(this))
+    .catch(function(err){
+
+    });
   }
 
 
@@ -108,9 +128,17 @@ class FrontendMaster extends React.Component {
     this.setState({ anchorEl: event.currentTarget });
   };
 
+  handleNotification(event){
+    this.setState({ anchorElNoti: event.currentTarget,unread:0 });
+  }
+
   handleClose() {
     this.setState({ anchorEl: null });
   };
+
+  handleCloseMenuNoti(){
+    this.setState({ anchorElNoti: null });
+  }
 
   handleLogout(){
     this.setState({ anchorEl: null });
@@ -128,8 +156,9 @@ class FrontendMaster extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { auth, anchorEl ,list,listBlogs} = this.state;
+    const { auth, anchorEl ,anchorElNoti ,list,listBlogs ,notifications} = this.state;
     const open = Boolean(anchorEl);
+    const openMenuNoti = Boolean(anchorElNoti);
 
     return (
       <div className={classes.root}>
@@ -153,7 +182,63 @@ class FrontendMaster extends React.Component {
           <NavLink to="/stream-registration" className={classes.topLink}><Button color="inherit">Đăng ký stream partner</Button></NavLink>
             <NavLink to="/courses" className={classes.topLink}><Button color="inherit">Khóa học</Button></NavLink>
             <NavLink to="/posts" className={classes.topLink}><Button color="inherit">Blogs</Button></NavLink>
-            <IconButton><Notifications style={{color:'#fff'}}/></IconButton>
+            <div>
+              <IconButton
+                aria-owns={openMenuNoti ? 'menu-appbar' : null}
+                aria-haspopup="true"
+                onClick={this.handleNotification.bind(this)}
+
+                >
+                <Notifications style={{color:'#fff'}}/>
+                {
+                  this.state.unread!=0 ?(
+                    <span style={{display:'block',top:5,right:5,width:17,height:17,background:'red',position:'absolute',borderRadius:'15%',fontSize:11,color:'#fff',fontWeight:'bold',paddingTop:'2px',textAlign:'center'}}>
+                      {this.state.unread}
+                    </span>
+                  ):null
+
+                }
+
+              </IconButton>
+              <Menu
+                style={{minWidth:200}}
+                id="menu-notification"
+                anchorEl={anchorElNoti}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={openMenuNoti}
+                onClose={this.handleCloseMenuNoti.bind(this)}
+              >
+              <Typography style={{padding:5,outline:0}}>Thông báo</Typography><hr/>
+
+                {
+                  notifications.length >  0 ? (
+                    <List style={{outline:0}}>
+                      {
+                        notifications.map(notification=>(
+                          <div>
+                            <ListItem>
+                              <Avatar alt="Remy Sharp" src="http://pantheon-dev.ypn:8092/images/logo.svg" className={classes.avatar} />
+                              <ListItemText primary={notification.data.message} secondary="July 20, 2014" />
+                            </ListItem>
+                            <Divider light />
+                          </div>
+                        ))
+                      }
+                    </List>
+                  ):(
+                    <Typography>Không có thông báo nào</Typography>
+                  )
+                }
+
+              </Menu>
+            </div>
             {auth && (
               <div>
                 <IconButton
