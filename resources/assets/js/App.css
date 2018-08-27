@@ -207,3 +207,7 @@ nav a, ul a {
 .MuiList-padding-279,.MuiList-padding-129 {
   padding:0!important;
 }
+
+.pantheon-select-approve:before{
+  border-bottom:0!important
+}

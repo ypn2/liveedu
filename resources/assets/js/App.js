@@ -121,6 +121,7 @@ class App extends React.Component{
                 <Router>
                   <Switch>
                     <Route path="/trainer-management" component={ThemeRoot} />
+                    <Route path="/personalize" component={Personalize} />
                     <Route component={FrontendMaster} />
                   </Switch>
                 </Router>

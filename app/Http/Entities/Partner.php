@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Notifications\PartnerRegistration;
 use App\Http\Entities\Channel;
 use App\Notifications\ActivePartner;
+use App\User;
 use DB;
 
 class Partner extends Model
@@ -83,23 +84,59 @@ class Partner extends Model
     }
 
     //Xác nhận đăng ký partner thành công
-    protected function activePartner($user_id){
-      $partner = $this->where('user_id',$user_id)->first();
-      $user = Auth::find($user_id);
+    protected function activePartner($id){
+      $partner = $this->where('id',$id)->first();
+      $user = User::find($partner->user_id);
 
       if($partner && $user){
 
         try{
-          DB:transaction(function(){
-            Channel::create($partner->id);
-            $partner->status = 1;
-            $partner->save();
-            $user->notify(new ActivePartner() );
-          });
+          DB::beginTransaction();
+          Channel::create($partner->id);
+          $partner->status = 1;
+          $partner->save();
+          $user->notify(new ActivePartner());
+          DB::commit();
+
+          return json_encode([
+            'code'=>200,
+            'status'=>'success'
+          ]);
+
         }catch(QueryException $ex){
 
+          DB::rollBack();
+
+          return json_encode([
+            'code'=>400,
+            'status'=>'Bad request',
+            'message'=>'Lỗi active streammer partner'
+          ]);
         }
       }
+    }
+
+    /*
+    /called:PartnerController@listRegistered
+    */
+    protected function list(){
+      $data = $this->join('users','users.id','=','_liveedu_partners.user_id')
+                  ->select('name','users.id as user_id','current_job','_liveedu_partners.id as partner_id')
+                  ->get();
+
+      if($data){
+        return json_encode([
+          'code'=>200,
+          'status'=>'success',
+          'data'=>$data
+        ]);
+      }
+
+      return json_encode([
+        'code'=>400,
+        'status'=>'Bad request',
+        'message'=>'Lỗi truy xuất danh sách đối tác đang đăng ký'
+      ]);
     }
 
 }

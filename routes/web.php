@@ -33,9 +33,14 @@ Route::group(['middleware' => 'web', 'prefix' => 'api'], function () {
 
     //Đăng ký và các xử lý liên quan đến partner (streammer)
     Route::group(['middleware'=>'web','prefix'=>'partner'] , function(){
+      //Thành viên đăng ký streammer partner
       Route::post('register','PartnerController@register');
       Route::post('check','PartnerController@check');
       Route::post('active','PartnerController@activePartner');
+
+      //Danh sách các streammer đã đăng ký nhưng chưa phê duyệt
+      Route::post('list-registered','PartnerController@listRegistered');
+
     });
 
     Route::group(['middleware'=>'web','prefix'=>'notification'],function(){

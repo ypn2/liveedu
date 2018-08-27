@@ -263,6 +263,7 @@ class FrontendMaster extends React.Component {
                   open={open}
                   onClose={this.handleClose.bind(this)}
                 >
+                  <NavLink to="/personalize" onClick={this.handleClose.bind(this)}><MenuItem >Quản lý</MenuItem></NavLink>
                   <NavLink to="/trainer-management" onClick={this.handleClose.bind(this)}><MenuItem >Cá nhân</MenuItem></NavLink>
                   <MenuItem onClick={this.handleLogout.bind(this)}>Đăng xuất</MenuItem>
                 </Menu>

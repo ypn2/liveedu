@@ -44,8 +44,16 @@ class PartnerController extends BaseController{
     return Partner::check(Auth::id());
   }
 
-  public function activePartner($user_id){
-    return Partner::activePartner($user_id);
+  public function activePartner(Request $request){
+    return Partner::activePartner($request->id);
+  }
+
+
+  /*route::api/partner/list-registered
+  /Load danh sách streammer partner đã đăng ký nhưng chưa duyệt
+  */
+  public function listRegistered(){
+    return Partner::list();
   }
 
 }
