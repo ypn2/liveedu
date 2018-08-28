@@ -88,8 +88,7 @@ class Partner extends Model
       $partner = $this->where('id',$id)->first();
       $user = User::find($partner->user_id);
 
-      if($partner && $user){
-
+      if($partner && $partner->status==0 && $user){
         try{
           DB::beginTransaction();
           Channel::create($partner->id);
@@ -100,7 +99,8 @@ class Partner extends Model
 
           return json_encode([
             'code'=>200,
-            'status'=>'success'
+            'status'=>'success',
+            'message'=>'Kích hoạt tài khoản stream partner thành công'
           ]);
 
         }catch(QueryException $ex){
@@ -114,6 +114,12 @@ class Partner extends Model
           ]);
         }
       }
+
+      return json_encode([
+        'code'=>400,
+        'status'=>'Bad request',
+        'message'=>'Stream partner đã được active'
+      ]);
     }
 
     /*

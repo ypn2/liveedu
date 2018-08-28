@@ -175,13 +175,6 @@ class ThemeRoot extends React.Component{
 
 
     return(
-      <ThemeContext.Provider value={
-          {
-            txt_nav_menus:lang.txt_nav_menus,
-            txt_input_control:lang.txt_input_control,
-            lang
-          }
-        }>
         <div className={classes.appFrame}>
           <AppBar
             className={classNames(classes.appBar, {
@@ -197,10 +190,7 @@ class ThemeRoot extends React.Component{
                 className={classNames(classes.menuButton, open && classes.hide)}
               >
                 <MenuIcon />
-              </IconButton>
-              <Typography variant="title" color="inherit"  className={classes.flex} >
-                {lang.txt_title_bar.txt_trainer_management}
-              </Typography>
+              </IconButton>              
               <div>
                   <IconButton
                     aria-haspopup="true"
@@ -247,8 +237,6 @@ class ThemeRoot extends React.Component{
 
           </main>
         </div>
-
-      </ThemeContext.Provider>
     )
   }
 }

@@ -40,6 +40,8 @@ import StoresLogin from './stores/StoresLogin';
 import ThemeContext from './themes/neymar/configs/context';
 import Personalize from './themes/neymar/personalize/PersonalizeMaster';
 
+import lang from './themes/neymar/langs/vi';
+
 
 ////////////////////////////////////////////////////////////
 // 1. Click the public page
@@ -117,7 +119,12 @@ class App extends React.Component{
             {
                 !this.state.authenticate ? _log :(
 
-              <ThemeContext.Provider value={{user:this.state.user}}>
+              <ThemeContext.Provider value={{
+                  user:this.state.user,
+                  txt_nav_menus:lang.txt_nav_menus,
+                  txt_input_control:lang.txt_input_control,
+                  lang
+                }}>
                 <Router>
                   <Switch>
                     <Route path="/trainer-management" component={ThemeRoot} />

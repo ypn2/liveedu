@@ -109,122 +109,127 @@ class NavBar extends React.Component {
                     </Collapse>
 
                 </List>
+                {
+                  context.user.isPartner ==1 ?(
+                    <div>
+                      <Divider/>
+                      <Typography variant="caption" style={{padding:15,background:'#b1b1b159'}}>Quản lý giảng viên</Typography>
+                      <List  component="nav">
 
-                <Divider/>
-                <Typography variant="caption" style={{padding:15,background:'#b1b1b159'}}>Quản lý giảng viên</Typography>
-                <List  component="nav">
-
-                  {/*Menu quản lý khóa học */}
-                  <ListItem button onClick={this.handleClick.bind(this,"is_open_course_menu")}>
-                    <ListItemIcon>
-                      <LocalOffer />
-                    </ListItemIcon>
-                    <ListItemText inset primary={context.txt_nav_menus.txt_course_management} />
-
-                    {this.state.submenu.is_open_course_menu ? <ExpandLess /> : <ExpandMore />}
-                  </ListItem>
-
-
-                  <Collapse in={this.state.submenu.is_open_course_menu} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                      <NavLink className={classes.navlink} to={route.base + route.nav.course.base + route.nav.course.course_list}>
-                        <ListItem button className={classes.nested}>
+                        {/*Menu quản lý khóa học */}
+                        <ListItem button onClick={this.handleClick.bind(this,"is_open_course_menu")}>
                           <ListItemIcon>
-                            <StarBorder />
+                            <LocalOffer />
                           </ListItemIcon>
-                          <ListItemText inset primary={context.txt_nav_menus.txt_course_list} />
-                        </ListItem>
-                      </NavLink>
+                          <ListItemText inset primary={context.txt_nav_menus.txt_course_management} />
 
-                      <NavLink className={classes.navlink} to={route.base + route.nav.course.base + route.nav.course.course_reg}>
-                        <ListItem button className={classes.nested}>
+                          {this.state.submenu.is_open_course_menu ? <ExpandLess /> : <ExpandMore />}
+                        </ListItem>
+
+
+                        <Collapse in={this.state.submenu.is_open_course_menu} timeout="auto" unmountOnExit>
+                          <List component="div" disablePadding>
+                            <NavLink className={classes.navlink} to={route.base + route.nav.course.base + route.nav.course.course_list}>
+                              <ListItem button className={classes.nested}>
+                                <ListItemIcon>
+                                  <StarBorder />
+                                </ListItemIcon>
+                                <ListItemText inset primary={context.txt_nav_menus.txt_course_list} />
+                              </ListItem>
+                            </NavLink>
+
+                            <NavLink className={classes.navlink} to={route.base + route.nav.course.base + route.nav.course.course_reg}>
+                              <ListItem button className={classes.nested}>
+                                <ListItemIcon>
+                                  <StarBorder />
+                                </ListItemIcon>
+                                <ListItemText inset primary={context.txt_nav_menus.txt_course_reg} />
+                              </ListItem>
+                            </NavLink>
+
+                          </List>
+                        </Collapse>
+                        {/*Kết thúc Menu quản lý khóa học*/}
+
+                        {/*Menu quản lý lớp học*/}
+                        <ListItem button onClick={this.handleClick.bind(this,"is_open_class_menu")}>
                           <ListItemIcon>
-                            <StarBorder />
+                            <LocalOffer />
                           </ListItemIcon>
-                          <ListItemText inset primary={context.txt_nav_menus.txt_course_reg} />
+                          <ListItemText inset primary={context.txt_nav_menus.txt_class_management} />
+
+                          {this.state.submenu.is_open_class_menu ? <ExpandLess /> : <ExpandMore />}
                         </ListItem>
-                      </NavLink>
 
-                    </List>
-                  </Collapse>
-                  {/*Kết thúc Menu quản lý khóa học*/}
+                        <Collapse in={this.state.submenu.is_open_class_menu} timeout="auto" unmountOnExit>
+                          <List component="div" disablePadding>
+                            <NavLink className={classes.navlink} to={route.base + route.nav.classs.base + route.nav.classs.class_list}>
+                              <ListItem button className={classes.nested}>
+                                <ListItemIcon>
+                                  <StarBorder />
+                                </ListItemIcon>
+                                <ListItemText inset primary={context.txt_nav_menus.txt_class_list} />
+                              </ListItem>
+                            </NavLink>
 
-                  {/*Menu quản lý lớp học*/}
-                  <ListItem button onClick={this.handleClick.bind(this,"is_open_class_menu")}>
-                    <ListItemIcon>
-                      <LocalOffer />
-                    </ListItemIcon>
-                    <ListItemText inset primary={context.txt_nav_menus.txt_class_management} />
+                            <NavLink className={classes.navlink} to={route.base + route.nav.classs.base + route.nav.classs.class_reg}>
+                              <ListItem button className={classes.nested}>
+                                <ListItemIcon>
+                                  <StarBorder />
+                                </ListItemIcon>
+                                <ListItemText inset primary={context.txt_nav_menus.txt_class_reg} />
+                              </ListItem>
+                            </NavLink>
 
-                    {this.state.submenu.is_open_class_menu ? <ExpandLess /> : <ExpandMore />}
-                  </ListItem>
+                          </List>
+                        </Collapse>
+                        {/*Kết thúc menu quả lý lớp học*/}
 
-                  <Collapse in={this.state.submenu.is_open_class_menu} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                      <NavLink className={classes.navlink} to={route.base + route.nav.classs.base + route.nav.classs.class_list}>
-                        <ListItem button className={classes.nested}>
+                        {/*Quản lý bài viết*/}
+                        <ListItem button onClick={this.handleClick.bind(this,'is_open_post_menu')}>
                           <ListItemIcon>
-                            <StarBorder />
+                              <LocalOffer />
                           </ListItemIcon>
-                          <ListItemText inset primary={context.txt_nav_menus.txt_class_list} />
+                          <ListItemText inset primary={context.txt_nav_menus.txt_post_management} />
+                          {this.state.submenu.is_open_post_menu ? <ExpandLess /> : <ExpandMore />}
                         </ListItem>
-                      </NavLink>
+                        <Collapse in={this.state.submenu.is_open_post_menu} timeout="auto" unmountOnExit>
+                          <List component="div" disablePadding>
+                            <NavLink className={classes.navlink} to={route.base + route.nav.post.base + route.nav.post.post_list}>
+                            <ListItem button className={classes.nested}>
+                              <ListItemIcon>
+                                <StarBorder />
+                              </ListItemIcon>
+                              <ListItemText inset primary={context.txt_nav_menus.txt_post_list} />
+                            </ListItem>
+                            </NavLink>
+                            <NavLink className={classes.navlink} to={route.base + route.nav.post.base + route.nav.post.post_create}>
+                            <ListItem button className={classes.nested}>
+                              <ListItemIcon>
+                                <StarBorder />
+                              </ListItemIcon>
+                              <ListItemText inset primary={context.txt_nav_menus.txt_post_create} />
+                            </ListItem>
+                            </NavLink>
+                          </List>
+                        </Collapse>
+                        {/*Kết thúc menu quản lý bài viết*/}
 
-                      <NavLink className={classes.navlink} to={route.base + route.nav.classs.base + route.nav.classs.class_reg}>
-                        <ListItem button className={classes.nested}>
-                          <ListItemIcon>
-                            <StarBorder />
-                          </ListItemIcon>
-                          <ListItemText inset primary={context.txt_nav_menus.txt_class_reg} />
-                        </ListItem>
-                      </NavLink>
+                        {/*menu cài đặt kênh*/}
+                        <NavLink className={classes.navlink} to={route.base + route.nav.channel_settings.base}>
+                          <ListItem button>
+                            <ListItemIcon>
+                                <LocalOffer />
+                            </ListItemIcon>
+                            <ListItemText inset primary={context.txt_nav_menus.txt_channel_settings} />
+                          </ListItem>
+                        </NavLink>
+                        {/*kết thúc menu cài đặt kênh*/}
 
-                    </List>
-                  </Collapse>
-                  {/*Kết thúc menu quả lý lớp học*/}
-
-                  {/*Quản lý bài viết*/}
-                  <ListItem button onClick={this.handleClick.bind(this,'is_open_post_menu')}>
-                    <ListItemIcon>
-                        <LocalOffer />
-                    </ListItemIcon>
-                    <ListItemText inset primary={context.txt_nav_menus.txt_post_management} />
-                    {this.state.submenu.is_open_post_menu ? <ExpandLess /> : <ExpandMore />}
-                  </ListItem>
-                  <Collapse in={this.state.submenu.is_open_post_menu} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                      <NavLink className={classes.navlink} to={route.base + route.nav.post.base + route.nav.post.post_list}>
-                      <ListItem button className={classes.nested}>
-                        <ListItemIcon>
-                          <StarBorder />
-                        </ListItemIcon>
-                        <ListItemText inset primary={context.txt_nav_menus.txt_post_list} />
-                      </ListItem>
-                      </NavLink>
-                      <NavLink className={classes.navlink} to={route.base + route.nav.post.base + route.nav.post.post_create}>
-                      <ListItem button className={classes.nested}>
-                        <ListItemIcon>
-                          <StarBorder />
-                        </ListItemIcon>
-                        <ListItemText inset primary={context.txt_nav_menus.txt_post_create} />
-                      </ListItem>
-                      </NavLink>
-                    </List>
-                  </Collapse>
-                  {/*Kết thúc menu quản lý bài viết*/}
-
-                  {/*menu cài đặt kênh*/}
-                  <NavLink className={classes.navlink} to={route.base + route.nav.channel_settings.base}>
-                    <ListItem button>
-                      <ListItemIcon>
-                          <LocalOffer />
-                      </ListItemIcon>
-                      <ListItemText inset primary={context.txt_nav_menus.txt_channel_settings} />
-                    </ListItem>
-                  </NavLink>
-                  {/*kết thúc menu cài đặt kênh*/}
-
-                </List>
+                      </List>
+                    </div>
+                  ):null
+                }
               </div>
             )
           }

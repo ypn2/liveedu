@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Entities\Partner;
 use App\User;
 
 class LoginController extends Controller
@@ -102,7 +103,14 @@ class LoginController extends Controller
 
     public function check(){
       if(Auth::check()){
-        return json_encode(auth::user());
+
+        $user =  Auth::user();
+
+        $isPartner = json_decode(Partner::check($user->id));
+
+        $user->isPartner = $isPartner->status;
+
+        return json_encode($user);
       }
       return 0;
     }

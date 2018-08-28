@@ -15,6 +15,13 @@ import Typography from '@material-ui/core/Typography';
 import Selections from './Selections';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
+import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import CancelIcon from '@material-ui/icons/Cancel';
+import Snackbar from '@material-ui/core/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
+
 
 const styles = theme => ({
   root: {
@@ -34,7 +41,9 @@ class PartnerRegistered extends React.Component {
     super();
 
     this.state = {
-      listRegistered:[]
+      listRegistered:[],
+      showSnack:false,
+      snackMessage:''
     }
   }
 
@@ -51,6 +60,33 @@ class PartnerRegistered extends React.Component {
 
     });
   }
+
+  accepPartner(partnerId){
+
+    event.target.setAttribute('disabled','disabled');
+
+    axios.post('/api/partner/active',{
+      id:partnerId
+    })
+    .then(function(response){
+      this.setState({
+        snackMessage:response.data.message,
+        showSnack:true
+      });
+    }.bind(this))
+    .catch(function(err){
+      console.log(response.err);
+    });
+  }
+
+  rejectPartner(partnerId){
+      alert(partnerId);
+  }
+
+  handleCloseSnack(){
+    this.setState({ showSnack: false });
+  }
+
 
   render(){
 
@@ -78,7 +114,14 @@ class PartnerRegistered extends React.Component {
                       <ListItemText primary={partner.name} secondary={partner.current_job} />
                       <ListItemSecondaryAction>
                         <ListItemSecondaryAction>
-                          <Selections partnerId = { partner.partner_id } />
+                          <div style={{width:100}}>
+                            <IconButton onClick={this.accepPartner.bind(this,partner.partner_id)} className={classes.button} aria-label="Accepted" style={{color:'green'}}>
+                              <CheckCircleIcon  />
+                            </IconButton>
+                            <IconButton onClick={this.rejectPartner.bind(this,partner.partner_id)} className={classes.button} aria-label="Reject" style={{color:'red'}}>
+                              <CancelIcon />
+                            </IconButton>
+                          </div>
                         </ListItemSecondaryAction>
                       </ListItemSecondaryAction>
                     </ListItem>
@@ -89,6 +132,26 @@ class PartnerRegistered extends React.Component {
             }
           </List>
         </Paper>
+        <Snackbar
+          anchorOrigin={{ vertical:'top', horizontal:'right' }}
+          open={this.state.showSnack}
+          onClose={this.handleCloseSnack.bind(this)}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id" >{this.state.snackMessage}</span>}
+
+          action={[
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="inherit"
+              onClick={this.handleCloseSnack.bind(this)}
+            >
+              <CloseIcon />
+            </IconButton>,
+          ]}
+        />
       </div>
     );
 
