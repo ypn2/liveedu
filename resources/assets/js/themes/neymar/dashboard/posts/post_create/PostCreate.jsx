@@ -11,6 +11,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Icon from '@material-ui/core/Icon';
 import DeleteIcon from '@material-ui/icons/Delete';
 import NavigationIcon from '@material-ui/icons/Navigation';
+import AvatarEditor from 'react-avatar-editor'
 
 
 import ReactCrop from 'react-image-crop';
@@ -18,7 +19,7 @@ import 'react-image-crop/dist/ReactCrop.css';
 
 function getCroppedImg(image, pixelCrop, fileName) {
 
-  alert('#cropt');
+  //alert('#cropt');
 
   const canvas = document.createElement('canvas');
   canvas.width = pixelCrop.width;
@@ -38,15 +39,17 @@ function getCroppedImg(image, pixelCrop, fileName) {
   );
 
   // As Base64 string
-  // const base64Image = canvas.toDataURL('image/jpeg');
+  const base64Image = canvas.toDataURL('image/jpeg');
 
   // As a blob
-  return new Promise((resolve, reject) => {
-    canvas.toBlob(file => {
-      file.name = fileName;
-      resolve(file);
-    }, 'image/jpeg');
-  });
+  // return new Promise((resolve, reject) => {
+  //   canvas.toBlob(file => {
+  //     file.name = fileName;
+  //     resolve(file);
+  //   }, 'image/jpeg');
+  // });
+
+  return base64Image;
 }
 
 
@@ -55,12 +58,12 @@ export default class PostCreate extends React.Component{
     constructor(){
       super();
       this.state = {
-        image:'#',
+        image:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8--W3In1em5F5MTwuDGCu6wPa_iYls2T139ymHxNKF01VFot4RA',
         crop: {
            x: 20,
            y: 10,
-           width:16,
-           height:9,
+           width:200,
+           height:400,
            aspect: 16/9
         }
       }
@@ -106,19 +109,18 @@ export default class PostCreate extends React.Component{
       this.setState({ crop });
     }
 
-    cropImage(){
+    async cropImage(){
 
-      var image =  document.getElementById("myimage");
+      const image =  $('.ReactCrop__image')[0];
+      const pixelCrop = this.state.crop;
+      const fileName = 'result_crop';
 
-      var c = document.getElementById("myCanvas");
-       var ctx = c.getContext("2d");
-       ctx.drawImage(image, 10, 10);
+      const croppedImg = await getCroppedImg(image,pixelCrop,fileName);
 
-      console.log(image);
-      // const   pixelCrop = this.state.crop;
-      // const fileName='result';
-      //
-      getCroppedImg(image,pixelCrop,fileName);
+      this.setState({
+        image:croppedImg
+      })
+
     }
 
     render(){
@@ -146,18 +148,15 @@ export default class PostCreate extends React.Component{
                    <span>  Ảnh đại diện</span>
                   <br/><br/>
                   <div>
-                    {
-                      // <ReactCrop
-                      //   onImageLoaded={this.onImageLoaded}
-                      //   onComplete={this.onCropComplete}
-                      //   onChange={this.cropChange.bind(this)}
-                      //   crop={this.state.crop}
-                      //   src={this.state.image}
-                      //   />
-                    }
-                    <img id="myimage" src="https://v1-3-0.material-ui.com/static/images/uxceo-128.jpg" />
-
-                    <canvas id="myCanvas" width="240" height="297" style={{border:'1px solid #d3d3d3'}}/>
+                    <AvatarEditor
+                      image={this.state.image}
+                      width={345}
+                      height={194}
+                      border={50}
+                      color={[255, 255, 255, 0.6]} // RGBA
+                      scale={1.2}
+                      rotate={0}
+                    />
 
                     <button onClick={this.cropImage.bind(this)}>crop</button>
                   </div>
