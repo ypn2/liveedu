@@ -1,6 +1,8 @@
 import React from 'react';
-import TinyMCE from 'react-tinymce';
 import Card from '@material-ui/core/Card';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 import CardContent from '@material-ui/core/CardContent';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
@@ -13,14 +15,26 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import NavigationIcon from '@material-ui/icons/Navigation';
 import AvatarEditor from 'react-avatar-editor'
 
+import { Editor } from '@tinymce/tinymce-react';
 
+const styles = {
+  cropwrapper:{
+    width:690,
+    height:388,
+    background:"url('https://via.placeholder.com/690x388')"
 
-export default class PostCreate extends React.Component{
+  }
+}
+
+class PostCreate extends React.Component{
 
     constructor(){
       super();
       this.state = {
-        image:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8--W3In1em5F5MTwuDGCu6wPa_iYls2T139ymHxNKF01VFot4RA',
+        hasImage:false,
+        image:'#',
+        scale:1,
+        border:0,
       }
     }
 
@@ -33,21 +47,31 @@ export default class PostCreate extends React.Component{
     }
 
     uploadImageChange(event){
-      var input = event.target;
-      var _self = this;
+
+        var image, file;
+
+        var input = event.target;
+        var _self = this;
+
+       if (input.files && input.files[0]) {
+
+           image = new Image();
+
+           image.onload = function() {
+
+                _self.setState({
+                  border:50,
+                  hasImage:true,
+                  image:this.src,
+                  scale:Math.floor(this.width / 345)
+                })
 
 
-      var image, file;
+           };
+
+           image.src = window.URL.createObjectURL(input.files[0]);
 
 
-      if (input.files && input.files[0]) {
-
-        image = new Image();
-
-         image.onload = function() {
-
-             alert("The image width is " +input.width + " and image height is " + input.height);
-         };
        }
 
     }
@@ -58,16 +82,20 @@ export default class PostCreate extends React.Component{
       fetch(canvas)
         .then(res => res.blob())
         .then(blob => (imageURL = window.URL.createObjectURL(blob)));
-        console.log(canvas);
 
         this.setState({
-          image:canvas
+          image:canvas,
+          scale:1,
+          border:0
         })
     }
 
     setEditorRef(editor){this.editor = editor}
 
     render(){
+
+      const {classes} = this.props;
+
       return(
         <div>
           <div style={{marginBottom:15}}>
@@ -85,39 +113,55 @@ export default class PostCreate extends React.Component{
                   style={{minWidth:550}}
                 />
               <br/><br/>
-                  <input id= 'upload-image-post' onChange={this.uploadImageChange.bind(this)} accept="image/*" style={{display:'none'}}  type="file" />
-                  <Button onClick={this.openFileChooser} style={{width:40,height:40}} type="file" variant="fab" color="secondary" aria-label="edit">
-                    <Icon>camera_alt_icon</Icon>
-                  </Button>
-                   <span>  Ảnh đại diện</span>
-                  <br/><br/>
+
+              {/*crop image*/}
+              {
+                !this.state.hasImage ? (
+                  <div className={classes.cropwrapper}>
+                    <input id= 'upload-image-post' onChange={this.uploadImageChange.bind(this)} accept="image/*" style={{display:'none'}}  type="file" />
+                    <Button onClick={this.openFileChooser} style={{width:40,height:40}} type="file" variant="fab"  aria-label="edit">
+                      <Icon>camera_alt_icon</Icon>
+                    </Button>
+                     <span> Tải ảnh đại diện</span>
+                  </div>
+                ):
                   <div>
+                    <input id= 'upload-image-post' onChange={this.uploadImageChange.bind(this)} accept="image/*" style={{display:'none'}}  type="file" />
+                    <Button onClick={this.openFileChooser} style={{width:40,height:40}} type="file" variant="fab"  aria-label="edit">
+                      <Icon>camera_alt_icon</Icon>
+                    </Button>
+                     <span>  Ảnh đại diện</span>
                     <AvatarEditor
                       ref={this.setEditorRef.bind(this)}
                       image={this.state.image}
-                      width={345}
-                      height={194}
-                      border={0}
-                      color={[255, 255, 255, 0.6]}
-                      scale={4}
+                      width={690}
+                      height={388}
+                      border={this.state.border}
+                      color={[0, 0, 0, 0.5]}
+                      scale={this.state.scale}
                       rotate={0}
-                    />
-                  <button onClick={this.saveImage.bind(this)}>Save Image</button>
-                  </div>
+                      />
+                    <button onClick={this.saveImage.bind(this)}>Save Image</button>
+
+                </div>
+              }
+
+              {/*end crop image*/}
+
                 <br/>
                 <br/>
                 <Typography color="textSecondary">
                   Nội dung bài viết
                 </Typography>
                 <br/>
-                <TinyMCE
-                    config={{
-                      plugins: 'autolink link image lists print preview',
-                      toolbar: 'undo redo | bold italic | alignleft aligncenter alignright',
-                      height:500
-                    }}
-                    onChange={this.handleEditorChange}
-                  />
+                  <Editor
+                     initialValue="<p>This is the initial content of the editor</p>"
+                     init={{
+                       plugins: 'link image code',
+                       toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code'
+                     }}
+                     onChange={this.handleEditorChange}
+                   />
               </div>
             </CardContent>
           </Card>
@@ -126,3 +170,9 @@ export default class PostCreate extends React.Component{
       )
     }
 }
+
+PostCreate.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(PostCreate);

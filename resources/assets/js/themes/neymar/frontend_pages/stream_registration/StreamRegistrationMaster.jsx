@@ -25,7 +25,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import Paper from '@material-ui/core/Paper';
-import TinyMCE from 'react-tinymce';
+import { Editor } from '@tinymce/tinymce-react';
 
 import ThemeContext from '../../configs/context';
 import axios from 'axios';
