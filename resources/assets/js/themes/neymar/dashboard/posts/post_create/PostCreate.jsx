@@ -157,8 +157,8 @@ class PostCreate extends React.Component{
                   <Editor
                      initialValue="<p>This is the initial content of the editor</p>"
                      init={{
-                       plugins: 'link image code',
-                       toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code'
+                       plugins : 'advlist autolink link image lists charmap print preview emoticons',
+                       toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code | emoticons'
                      }}
                      onChange={this.handleEditorChange}
                    />
