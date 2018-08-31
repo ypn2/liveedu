@@ -15,6 +15,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import NavigationIcon from '@material-ui/icons/Navigation';
 import AvatarEditor from 'react-avatar-editor'
 
+import axios from 'axios';
+
 import { Editor } from '@tinymce/tinymce-react';
 
 const styles = {
@@ -25,6 +27,8 @@ const styles = {
 
   }
 }
+
+var  postContent='';
 
 class PostCreate extends React.Component{
 
@@ -39,7 +43,7 @@ class PostCreate extends React.Component{
     }
 
     handleEditorChange(e) {
-      console.log(e.target.getContent());
+      postContent = e.target.getContent();
     }
 
     openFileChooser(){
@@ -92,6 +96,37 @@ class PostCreate extends React.Component{
 
     setEditorRef(editor){this.editor = editor}
 
+    submitForm(){
+
+      // if(this.state.image == '#'){
+      //   alert('Cover image cannot empty');
+      //
+      //   return;
+      // }
+
+      //const words = Editor.plugins.wordcount.getCount();
+
+      console.log(Editor.plugins);
+
+      return;
+
+      const title = $('#post_name').val();
+      const image_conver = this.state.image
+
+      axios.post('/api/post/create',{
+        title,
+        image_cover
+      })
+      .then(function(response){
+
+      })
+      .catch(function(err){
+
+      });
+
+
+    }
+
     render(){
 
       const {classes} = this.props;
@@ -99,7 +134,7 @@ class PostCreate extends React.Component{
       return(
         <div>
           <div style={{marginBottom:15}}>
-            <Button variant="contained" aria-label="Đăng bài" color="primary" size="small">Đăng bài</Button>
+            <Button onClick={this.submitForm.bind(this)} variant="contained" aria-label="Đăng bài" color="primary" size="small">Đăng bài</Button>
           </div>
 
           <Card>
@@ -107,7 +142,7 @@ class PostCreate extends React.Component{
               <div>
                 <TextField
                   required
-                  id="entry_post_name"
+                  id="post_name"
                   label='Tên bài viết'
                   margin="normal"
                   style={{minWidth:550}}
@@ -157,8 +192,9 @@ class PostCreate extends React.Component{
                   <Editor
                      initialValue="<p>This is the initial content of the editor</p>"
                      init={{
-                       plugins : 'advlist autolink link image lists charmap print preview emoticons',
-                       toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code | emoticons'
+                       plugins : 'advlist autolink link image lists charmap print preview codesample wordcount',
+                       toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code | codesample',
+                      height:"500"
                      }}
                      onChange={this.handleEditorChange}
                    />
