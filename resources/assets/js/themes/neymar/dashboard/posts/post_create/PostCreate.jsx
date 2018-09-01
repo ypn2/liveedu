@@ -29,6 +29,7 @@ const styles = {
 }
 
 var  postContent='';
+var image_cover = '';
 
 class PostCreate extends React.Component{
 
@@ -80,45 +81,29 @@ class PostCreate extends React.Component{
 
     }
 
-    saveImage(){
+    changeSelectedArea(){
       const canvas = this.editor.getImage().toDataURL();
-      let imageURL;
-      fetch(canvas)
-        .then(res => res.blob())
-        .then(blob => (imageURL = window.URL.createObjectURL(blob)));
+        let imageURL;
+        fetch(canvas)
+          .then(res => res.blob())
+          .then(blob => (imageURL = window.URL.createObjectURL(blob)));
 
-        this.setState({
-          image:canvas,
-          scale:1,
-          border:0
-        })
+          image_cover = canvas
     }
 
     setEditorRef(editor){this.editor = editor}
 
     submitForm(){
 
-      // if(this.state.image == '#'){
-      //   alert('Cover image cannot empty');
-      //
-      //   return;
-      // }
-
-      //const words = Editor.plugins.wordcount.getCount();
-
-      console.log(Editor.plugins);
-
-      return;
-
       const title = $('#post_name').val();
-      const image_conver = this.state.image
 
       axios.post('/api/post/create',{
         title,
-        image_cover
+        image_cover,
+        postContent
       })
       .then(function(response){
-
+        console.log(response.data);
       })
       .catch(function(err){
 
@@ -174,9 +159,9 @@ class PostCreate extends React.Component{
                       border={this.state.border}
                       color={[0, 0, 0, 0.5]}
                       scale={this.state.scale}
+                      onPositionChange = {this.changeSelectedArea.bind(this)}
                       rotate={0}
                       />
-                    <button onClick={this.saveImage.bind(this)}>Save Image</button>
 
                 </div>
               }

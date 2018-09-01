@@ -190,7 +190,7 @@ class PersonalizeMaster extends React.Component{
               >
                 <MenuIcon />
               </IconButton>
-              <Typography variant="title" color="inherit"  className={classes.flex} >
+              <Typography variant="title" color="inherit"  className={classes.flex}>
                 {lang.txt_title_bar.txt_trainer_management}
               </Typography>
               <div>
@@ -200,7 +200,7 @@ class PersonalizeMaster extends React.Component{
                     onClick={this.handleMenu.bind(this)}
                   >
                     <AccountCircle />
-                  </IconButton>                
+                  </IconButton>
               </div>
             </Toolbar>
           </AppBar>

@@ -190,8 +190,11 @@ class ThemeRoot extends React.Component{
                 className={classNames(classes.menuButton, open && classes.hide)}
               >
                 <MenuIcon />
-              </IconButton>              
+              </IconButton>
+
+              <span className={classes.flex}></span>
               <div>
+                  <span color="inherit" style={{fontSize:14}}>Phạm Như Ý</span>
                   <IconButton
                     aria-haspopup="true"
                     color="inherit"
