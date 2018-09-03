@@ -159,6 +159,7 @@ class ThemeRoot extends React.Component{
         classes={{
           paper: classes.drawerPaper,
         }}
+        style={{position:'fixed'}}
       >
         <div className={classes.drawerHeader} style={{minHeight:0}}>
           <NavLink to="/" style={{position:'absolute',left:0}}><img className={classes.logo} src={logo}/></NavLink>
@@ -227,10 +228,7 @@ class ThemeRoot extends React.Component{
           </AppBar>
           {drawer}
           <main
-            className={classNames(classes.content, classes[`content-${anchor}`], {
-              [classes.contentShift]: open,
-              [classes[`contentShift-${anchor}`]]: open,
-            })}
+            className={open?'pan-dash-maincontent-open':'pan-dash-maincontent-close'}
           >
             <div className={classes.drawerHeader} />
 

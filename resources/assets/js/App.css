@@ -211,3 +211,65 @@ nav a, ul a {
 .pantheon-select-approve:before{
   border-bottom:0!important
 }
+
+/*dashboard*/
+.pan-dash-maincontent-open{
+  width: calc(100% - 320px);
+  margin-left: 300px;
+  transition: all 0.3s ease;
+}
+
+.pan-dash-maincontent-close{
+  width: 100%;
+  margin-left: 0;
+  transition: all 0.3s ease;
+  padding:0 15px!important;
+}
+
+/*create post*/
+.pan-post-infomations {
+   border-collapse: collapse;
+   width:100%;
+}
+
+.pan-post-infomations td {
+    border: 1px solid #f0f0f0;
+}
+
+
+td.pan-post-td-first{
+  width:25%;
+  background:#F9F9F9;
+  padding-left: 15px;
+  border-bottom: 1px solid black;
+  border-left: 0;
+}
+
+.pan-post-infomations tr:last-child td.pan-post-td-first {
+    border-bottom: 0;
+}
+
+
+
+td.pan-post-td-first span{
+  font-weight: bold;
+
+}
+
+td.pan-post-td-second{
+  padding:15px;
+  border-right:0;
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #ddd;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: #ddd;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: #ddd;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: #ddd;
+}
