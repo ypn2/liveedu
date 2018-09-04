@@ -21,6 +21,8 @@ import Chip from '@material-ui/core/Chip';
 import ThemeContext from '../../../configs/context';
 import CourseCurriculum from './components/CourseCurriculum';
 
+import axios from 'axios';
+
 const styles = {
   card: {
     minWidth: 275,
@@ -38,7 +40,7 @@ const styles = {
     marginBottom: 12,
   },
   textfield:{
-    minWidth:550
+    width:'100%'
   },
 
   chips: {
@@ -46,10 +48,6 @@ const styles = {
     flexWrap: 'wrap',
   },
 
-  formControl: {
-    minWidth: 120,
-    maxWidth: 300,
-  },
 };
 
 const names = [
@@ -89,6 +87,26 @@ class CourseRegister extends React.Component{
     this.setState({ name: event.target.value });
   };
 
+  fetchCuriculumn(data){
+    console.log(data);
+  }
+
+
+
+  //Submit form
+  submitRegisterdCourse(){
+    axios.post('/api/course/registerd',{
+      name:$('#course_name').val(),
+
+    })
+    .then(function(response){
+
+    })
+    .catch(function(err){
+
+    });
+  }
+
 
   render(){
 
@@ -107,20 +125,34 @@ class CourseRegister extends React.Component{
             <div>
               <TextField
                 required
-                id="entry_course_name"
+                id="course_name"
                 label={context.txt_input_control.course_reg.course_entry_name}
                 margin="normal"
                 className={classes.textfield}
               />
-              <br/>
+              <TextField
+                required
+                id="course_price"
+                label="Giá khóa học"
+                margin="normal"
+                className={classes.textfield}
+              />
 
-              <FormControl className={classes.formControl}>
+              <TextField
+                required
+                id="lesson_price"
+                label="Giá bài từng buổi học"
+                margin="normal"
+                className={classes.textfield}
+              />
+
+              <FormControl className={classes.textfield}>
                 <InputLabel htmlFor="select-multiple-checkbox">{context.txt_input_control.course_reg.course_entry_field}</InputLabel>
                 <Select
                   className={classes.textfield}
                   multiple
                   value={this.state.name}
-                  onChange={this.handleChange}
+                  onChange={this.handleChange.bind(this)}
                   input={<Input id="select-multiple-checkbox" />}
                   renderValue={selected => (
                    <div className={classes.chips}>
@@ -158,12 +190,12 @@ class CourseRegister extends React.Component{
                 <Typography variant="subheading" color="textSecondary" gutterBottom>
                   {context.txt_input_control.course_reg.course_header_curiculum}
                 </Typography>
-                <CourseCurriculum/>
+                <CourseCurriculum fetchData={this.fetchCuriculumn.bind(this)} />
 
             </div>
            </CardContent>
            <CardActions>
-             <Button variant="contained" size="small" color="primary">{context.txt_input_control.base.submit_reg}</Button>
+             <Button onClick={this.submitRegisterdCourse.bind(this)} variant="contained" size="small" color="primary">{context.txt_input_control.base.submit_reg}</Button>
            </CardActions>
          </Card>
         }

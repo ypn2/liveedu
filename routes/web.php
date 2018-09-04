@@ -43,6 +43,10 @@ Route::group(['middleware' => 'web', 'prefix' => 'api'], function () {
 
     });
 
+    Route::group(['middleware'=>'web','prefix'=>'course'],function(){
+      
+    });
+
     Route::group(['middleware'=>'web','prefix'=>'post'],function(){
       Route::post('create','PostController@create');
     });

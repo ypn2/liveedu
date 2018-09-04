@@ -232,6 +232,8 @@ class CourseCurriculum extends React.Component {
       this.setState({
         data:newData
       })
+
+      this.props.fetchData(newData);
   }
 
   deleteRows(){
@@ -260,7 +262,7 @@ class CourseCurriculum extends React.Component {
         {
           context =>
           <div className={classes.root}>
-            <EnhancedTableToolbar deleteRows = {this.deleteRows} addNewRow={this.addNewRow} numSelected={selected.length} />
+            <EnhancedTableToolbar deleteRows = {this.deleteRows.bind(this)} addNewRow={this.addNewRow.bind(this)} numSelected={selected.length} />
             <div className={classes.tableWrapper}>
               <Table className={classes.table}>
                 <EnhancedTableHead
