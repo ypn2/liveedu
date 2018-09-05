@@ -17,6 +17,7 @@ import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
 import Chip from '@material-ui/core/Chip';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 /*import component*/
 import ThemeContext from '../../../configs/context';
@@ -220,12 +221,30 @@ const MenuProps = {
   },
 };
 
+var curriculumn='';
+
+const _dfState = {
+  status:false,
+  message:''
+}
+
 class CourseRegister extends React.Component{
 
   constructor(props){
     super(props);
 
     this.state = {
+
+      error_name:_dfState,
+      error_course_price:_dfState,
+      error_lesson_price:_dfState,
+      error_fields:_dfState,
+      error_course_desc:_dfState,
+      error_course_target:_dfState,
+      error_course_pre_required:_dfState,
+      error_curriculumn:_dfState,
+
+
       name: [],
       course_price_number:0,
       course_price_text:'Không',
@@ -240,22 +259,109 @@ class CourseRegister extends React.Component{
   };
 
   fetchCuriculumn(data){
-    console.log(data);
+    curriculumn = data;
   }
 
-
+  resetState(){
+    this.setState({
+      error_name:_dfState,
+      error_course_price:_dfState,
+      error_lesson_price:_dfState,
+      error_fields:_dfState,
+      error_course_desc:_dfState,
+      error_course_target:_dfState,
+      error_course_pre_required:_dfState,
+      error_curriculumn:_dfState,
+    });
+  }
 
   //Submit form
   submitRegisterdCourse(){
-    axios.post('/api/course/registerd',{
-      name:$('#course_name').val(),
 
+    this.resetState();
+
+    axios.post('/api/course/registered',{
+      name:$('#course_name').val(),
+      course_price:$('#course_price').val(),
+      lesson_price:$('#lesson_price').val(),
+      fields:this.state.name,
+      course_desc:$("#course_desc").val(),
+      course_target:$('#course_target').val(),
+      pre_required:$('#pre_required').val(),
+      video_introdue_url:$('#video_introdue_url').val(),
+      curriculumn
     })
     .then(function(response){
+      if(response.data.code == 200){
+        alert('gửi đăng ký thành công. chúng tôi sẽ xem xét yêu cầu của bạn và phản hồi trong thời gian sớm nhất!')
+      }
+      else if(response.data.code == 300){        
+        var _mess = response.data.message;
 
-    })
+        if('name' in _mess){
+          this.setState({
+            error_name:{
+              status:true,
+              message:_mess.name
+            }
+          });
+        }
+
+        if('course_price' in _mess){
+          this.setState({
+            error_course_price:{
+              status:true,
+              message:_mess.course_price
+            }
+          });
+        }
+
+        if('lesson_price' in _mess){
+          this.setState({
+            error_lesson_price:{
+              status:true,
+              message:_mess.lesson_price
+            }
+          });
+        }
+
+        if('course_desc' in _mess){
+          this.setState({
+            error_course_desc:{
+              status:true,
+              message:_mess.course_desc
+            }
+          });
+        }
+
+        if('course_target' in _mess){
+          this.setState({
+            error_course_target:{
+              status:true,
+              message:_mess.course_target
+            }
+          });
+        }
+
+
+        if('pre_required' in _mess){
+          this.setState({
+            error_pre_requiredt:{
+              status:true,
+              message:_mess.pre_required
+            }
+          });
+        }
+
+      }
+      else{
+        alert('lỗi chưa xác định');
+      }
+
+
+    }.bind(this))
     .catch(function(err){
-
+      console.log(err);
     });
   }
 
@@ -269,7 +375,6 @@ class CourseRegister extends React.Component{
   }
 
   onLessonPriceChange(event){
-
     const amount = event.target.value;
     this.setState({
       course_lesson_text:DocTienBangChu(amount),
@@ -293,45 +398,95 @@ class CourseRegister extends React.Component{
              </Typography>
 
             <div>
-              <TextField
-                required
-                id="course_name"
-                label={context.txt_input_control.course_reg.course_entry_name}
-                margin="normal"
-                className={classes.textfield}
-              />
-              <div>
-              <TextField
-                required
-                id="course_price"
-                label="Giá khóa học"
-                type="number"
-                margin="normal"
-                InputProps={{
-                  endAdornment: <InputAdornment position="start">Đồng</InputAdornment>,
-                }}
-                style={{width:300}}
-                onChange = {this.onValueChange.bind(this)}
-              />		&nbsp;	&nbsp;	&nbsp;
 
-              <label>Định dạng: </label>&nbsp;<span style={{color:'red',fontWeight:'bold'}}>{this.state.course_price_number}</span>&nbsp;đồng | <label>Bằng chữ:</label>&nbsp;<span style={{color:'green',fontWeight:'bold'}}>{this.state.course_price_text}</span>&nbsp;đồng
-              </div>
-              <div>
-              <TextField
-                required
-                type="number"
-                id="lesson_price"
-                label="Giá bài từng buổi học"
-                onChange={this.onLessonPriceChange.bind(this)}
-                margin="normal"
-                InputProps={{
-                  endAdornment: <InputAdornment position="start">Đồng</InputAdornment>,
-                }}
-                style={{width:300}}
-              />	&nbsp;	&nbsp;	&nbsp;
+            <FormControl className={classes.textfield} error={this.state.error_name.status ? true : false}>
+               <InputLabel htmlFor="course_name">{context.txt_input_control.course_reg.course_entry_name}</InputLabel>
+               <Input
+                 required
+                 id="course_name"
+                 type="text"
+                 name="reg_first_name"
+               />
+             {
+               this.state.error_name.status ? (
+                 <FormHelperText>{this.state.error_name.message}</FormHelperText>
+               ):null
+             }
 
-              <label>Định dạng: </label>&nbsp;<span style={{color:'red',fontWeight:'bold'}}>{this.state.course_lesson_number}</span>&nbsp;đồng | <label>Bằng chữ:</label>&nbsp;<span style={{color:'green',fontWeight:'bold'}}>{this.state.course_lesson_text}</span>&nbsp;đồng
-              </div>
+            </FormControl><br/><br/>
+
+          <table>
+            <tbody>
+            <tr>
+              <td>
+
+                <FormControl className={classes.textfield} error={this.state.error_course_price.status ? true : false}>
+                     <InputLabel htmlFor="course_price">Giá cả khóa học</InputLabel>
+                     <Input
+                       required
+                       id="course_price"
+                       style={{width:300}}
+                       type="number"
+                       onChange = {this.onValueChange.bind(this)}
+                       endAdornment={
+                         <InputAdornment position="end">
+                          Đồng
+                         </InputAdornment>
+                       }
+                     />
+                   {
+                     this.state.error_course_price.status ? (
+                       <FormHelperText>{this.state.error_course_price.message}</FormHelperText>
+                     ):null
+                   }
+
+                  </FormControl>
+
+              </td>
+
+              <td>
+
+                <label>Định dạng: </label>&nbsp;<span style={{color:'red',fontWeight:'bold'}}>{this.state.course_price_number}</span>&nbsp;đồng | <label>Bằng chữ:</label>&nbsp;<span style={{color:'green',fontWeight:'bold'}}>{this.state.course_price_text}</span>&nbsp;đồng
+
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+
+                <FormControl className={classes.textfield} error={this.state.error_lesson_price.status ? true : false}>
+                     <InputLabel htmlFor="lesson_price">Giá từng buổi học</InputLabel>
+                     <Input
+                       required
+                       id="lesson_price"
+                       style={{width:300}}
+                       type="number"
+                       onChange = {this.onLessonPriceChange.bind(this)}
+                       endAdornment={
+                         <InputAdornment position="end">
+                          Đồng
+                         </InputAdornment>
+                       }
+                     />
+                   {
+                     this.state.error_lesson_price.status ? (
+                       <FormHelperText>{this.state.error_lesson_price.message}</FormHelperText>
+                     ):null
+                   }
+
+                  </FormControl>
+
+              </td>
+
+              <td>
+
+                <label>Định dạng: </label>&nbsp;<span style={{color:'red',fontWeight:'bold'}}>{this.state.course_lesson_number}</span>&nbsp;đồng | <label>Bằng chữ:</label>&nbsp;<span style={{color:'green',fontWeight:'bold'}}>{this.state.course_lesson_text}</span>&nbsp;đồng
+
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
 
               <FormControl className={classes.textfield}>
                 <InputLabel htmlFor="select-multiple-checkbox">{context.txt_input_control.course_reg.course_entry_field}</InputLabel>
@@ -358,7 +513,8 @@ class CourseRegister extends React.Component{
               </FormControl>
               <br/>
               <TextField
-                 id="entry_course_desc"
+                 id="course_desc"
+                 required
                  label={context.txt_input_control.course_reg.course_entry_desc}
                  multiline
                  rows="4"
@@ -366,14 +522,36 @@ class CourseRegister extends React.Component{
                  className={classes.textfield}
                />
                <br/>
+
                <TextField
-                 required
-                 id="entry_course_name"
+                  id="course_target"
+                  label="Mục tiêu của khóa học"
+                  required
+                  multiline
+                  rows="4"
+                  margin="normal"
+                  className={classes.textfield}
+                />
+                <br/>
+
+                <TextField
+                   id="pre_required"
+                   required
+                   label="Yêu cầu học viên"
+                   multiline
+                   rows="4"
+                   margin="normal"
+                   className={classes.textfield}
+                 />
+                 <br/>
+
+               <TextField
+                 id="video_introdue_url"
                  label={context.txt_input_control.course_reg.course_entry_video_url}
                  margin="normal"
                  className={classes.textfield}
                />
-               <br/>
+             <br/><br/>
                 <Typography variant="subheading" color="textSecondary" gutterBottom>
                   {context.txt_input_control.course_reg.course_header_curiculum}
                 </Typography>

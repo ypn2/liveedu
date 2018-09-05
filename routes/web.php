@@ -44,7 +44,7 @@ Route::group(['middleware' => 'web', 'prefix' => 'api'], function () {
     });
 
     Route::group(['middleware'=>'web','prefix'=>'course'],function(){
-      
+      Route::post('registered','CourseController@registered');
     });
 
     Route::group(['middleware'=>'web','prefix'=>'post'],function(){
@@ -54,7 +54,6 @@ Route::group(['middleware' => 'web', 'prefix' => 'api'], function () {
     Route::group(['middleware'=>'web','prefix'=>'notification'],function(){
       Route::post('get','NotificationController@get');
     });
-
 
 });
 

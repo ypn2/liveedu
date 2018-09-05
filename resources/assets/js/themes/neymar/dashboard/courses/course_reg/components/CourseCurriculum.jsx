@@ -26,7 +26,6 @@ import ThemeContext from '../../../../configs/context';
 const columnData = [
   { id: 'count', label: 'Bài học' },
   { id: 'name',  label: 'Tên bài giảng' },
-  { id: 'time',  label: 'Thời lượng' },
   { id: 'desc',  label: 'Mô tả' }
 ];
 
@@ -267,7 +266,7 @@ class CourseCurriculum extends React.Component {
               <Table className={classes.table}>
                 <EnhancedTableHead
                   numSelected={selected.length}
-                  onSelectAllClick={this.handleSelectAllClick}
+                  onSelectAllClick={this.handleSelectAllClick.bind(this)}
                   onRequestSort={this.handleRequestSort}
                   rowCount={data.length}
                 />
@@ -293,14 +292,6 @@ class CourseCurriculum extends React.Component {
                               fullWidth
                               onBlur={event=>this.forcusOut(event,'change_name',n.id)}
                               defaultValue={n.name}
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <Input
-                              value={this.state.weight}
-                              type="number"
-                              onBlur={event=>this.forcusOut(event,'change_time',n.id)}
-                              endAdornment={<InputAdornment position="end">{context.txt_input_control.base.min}</InputAdornment>}
                             />
                           </TableCell>
                           <TableCell>
