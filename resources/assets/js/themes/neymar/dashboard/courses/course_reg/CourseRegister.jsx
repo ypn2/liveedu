@@ -19,6 +19,8 @@ import Chip from '@material-ui/core/Chip';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FormHelperText from '@material-ui/core/FormHelperText';
 
+import { Route, Redirect } from 'react-router';
+
 /*import component*/
 import ThemeContext from '../../../configs/context';
 import CourseCurriculum from './components/CourseCurriculum';
@@ -249,7 +251,9 @@ class CourseRegister extends React.Component{
       course_price_number:0,
       course_price_text:'Không',
       course_lesson_number:0,
-      course_lesson_text:'Không'
+      course_lesson_text:'Không',
+
+      redirect:false
     };
 
   }
@@ -277,7 +281,6 @@ class CourseRegister extends React.Component{
 
   //Submit form
   submitRegisterdCourse(){
-
     this.resetState();
 
     axios.post('/api/course/registered',{
@@ -293,9 +296,11 @@ class CourseRegister extends React.Component{
     })
     .then(function(response){
       if(response.data.code == 200){
-        alert('gửi đăng ký thành công. chúng tôi sẽ xem xét yêu cầu của bạn và phản hồi trong thời gian sớm nhất!')
+        this.setState({
+          redirect:true
+        })
       }
-      else if(response.data.code == 300){        
+      else if(response.data.code == 300){
         var _mess = response.data.message;
 
         if('name' in _mess){
@@ -384,6 +389,10 @@ class CourseRegister extends React.Component{
 
 
   render(){
+
+    if(this.state.redirect){
+      return <Redirect to='trainer-management/course/list'/>;
+    }
 
     const { classes } = this.props;
 

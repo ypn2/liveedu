@@ -22,6 +22,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Divider  from '@material-ui/core/Divider';
 import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
+import classNames from 'classnames';
 
 const styles = theme => ({
   root: {
@@ -35,6 +36,21 @@ const styles = theme => ({
   },
   chip:{
     height:20
+  },
+  badges:{
+    fontSize:12,
+    fontWeight:'normal',
+    top:-5,
+    left:5,
+    position:'relative',
+    color:'#fff',
+    padding:'5px 7px'
+  },
+  badgesDeactive:{
+    background:'rgb(255, 87, 34)'
+  },
+  badgesActive:{
+    background:'rgb(66, 165, 245)'
   }
 });
 
@@ -74,7 +90,7 @@ class CourseList extends React.Component {
             </div>
             <div style={{width:'100%',paddingLeft:15}}>
               <div style={{height:140}}>
-                <h3 style={{marginTop:0,marginBottom:15,color:'#2C3E50'}}>Github Webhooks for Beginners</h3>
+                <h3 style={{marginTop:0,marginBottom:15,color:'#2C3E50'}}>Github Webhooks for Beginners <span className={classNames(classes.badges,classes.badgesDeactive)}>mới gửi đăng ký</span></h3>
 
                   <div>
 
@@ -106,7 +122,7 @@ class CourseList extends React.Component {
             </div>
             <div style={{width:'100%',paddingLeft:15}}>
               <div style={{height:140}}>
-                <h3 style={{marginTop:0,marginBottom:15,color:'#2C3E50'}}>Github Webhooks for Beginners</h3>
+                <h3 style={{marginTop:0,marginBottom:15,color:'#2C3E50'}}>Github Webhooks for Beginners <span  className={classNames(classes.badges,classes.badgesActive)}>sẵn sàng mở lớp</span></h3>
 
                   <div>
 
@@ -127,7 +143,7 @@ class CourseList extends React.Component {
               </div>
               <Divider/>
               <div style={{paddingTop:15}}>
-                <label>Trạng thái:</label><span style={{color:'green'}}><b>Đã được mở lớp</b></span>
+                <label>Trạng thái:</label><span style={{color:'green'}}><b>Sẵn sàng</b></span>
               </div>
             </div>
           </Card>
