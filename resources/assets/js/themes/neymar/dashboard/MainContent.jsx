@@ -11,9 +11,10 @@ import ChannelSettings from './channel_settings/ChannelSettings';
 import Profile  from './profile/Profile';
 import TraineeScheduleMaster from './trainee_schedule/TraineeScheduleMaster';
 import DiscussComponent from '../personalize/pages/discuss/DiscussComponent';
+import CourseList from './courses/course_list/CourseList';
 
-const CourseList = ()=> (
-  <h1>CourseList</h1>
+const CourseListPage = ()=> (
+  <CourseList/>
 )
 
 const CourseReg = ()=> (
@@ -61,7 +62,7 @@ export default class MainContent extends React.Component{
 
           <Route path={route.base + route.nav.discuss + "/:name"} component={DiscussPage} />
 
-          <Route path={route.base + route.nav.course.base + route.nav.course.course_list} component={CourseList} />
+          <Route path={route.base + route.nav.course.base + route.nav.course.course_list} component={CourseListPage} />
           <Route path={route.base + route.nav.course.base + route.nav.course.course_reg} component={CourseReg} />
 
           <Route path={route.base + route.nav.classs.base + route.nav.classs.class_list} component={ClassList} />
