@@ -3,6 +3,8 @@ import {Route,Router,Switch} from "react-router-dom";
 
 import RegisteredList from './pages/partner/PartnerRegistered';
 
+import CourseListMaster from './pages/courses/course_list/CourseListMaster';
+
 
 /*import pages*/
 
@@ -19,6 +21,10 @@ const RegisterListPage = () => (
   <RegisteredList/>
 )
 
+const CourseList = ()=>(
+  <CourseListMaster/>
+)
+
 
 
 export default class MainContent extends React.Component{
@@ -27,6 +33,8 @@ export default class MainContent extends React.Component{
       <Switch>
 
           <Route path='/personalize/dashboard' component={Dashboard} />
+
+          <Route path='/personalize/courses/list' component={CourseList} />
 
           <Route path='/personalize/streammer-partner/registered-list' component={RegisterListPage} />
 

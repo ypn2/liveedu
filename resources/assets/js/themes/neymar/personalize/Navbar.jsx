@@ -41,6 +41,7 @@ class NavBar extends React.Component {
     this.state = {
       submenu:{
         is_open_streammer_partner:false,
+        is_open_course:false
       }
     };
   }
@@ -67,7 +68,7 @@ class NavBar extends React.Component {
                     <LocalOffer />
                 </ListItemIcon>
                 <ListItemText inset primary="Streammer partner" />
-                {this.state.submenu.is_open_streammer_partner ? <ExpandLess /> : <ExpandMore />}  
+                {this.state.submenu.is_open_streammer_partner ? <ExpandLess /> : <ExpandMore />}
               </ListItem>
 
               <Collapse in={this.state.submenu.is_open_streammer_partner} timeout="auto" unmountOnExit>
@@ -89,7 +90,38 @@ class NavBar extends React.Component {
                       <ListItemText inset primary="Đang hoạt động" />
                     </ListItem>
                   </NavLink>
+                </List>
+              </Collapse>
 
+
+              {/*Menu quản lý khóa học */}
+              <ListItem button onClick={this.handleClick.bind(this,"is_open_course")} >
+                <ListItemIcon>
+                    <LocalOffer />
+                </ListItemIcon>
+                <ListItemText inset primary="Quản lý khóa học" />
+                {this.state.submenu.is_open_course ? <ExpandLess /> : <ExpandMore />}
+              </ListItem>
+
+              <Collapse in={this.state.submenu.is_open_course} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <NavLink className={classes.navlink} to='/personalize/courses/list'>
+                    <ListItem button className={classes.nested}>
+                      <ListItemIcon>
+                        <StarBorder />
+                      </ListItemIcon>
+                      <ListItemText inset primary="Danh sách khóa học" />
+                    </ListItem>
+                  </NavLink>
+
+                  <NavLink className={classes.navlink} to='/personalize/course'>
+                    <ListItem button className={classes.nested}>
+                      <ListItemIcon>
+                        <StarBorder />
+                      </ListItemIcon>
+                      <ListItemText inset primary="Đang hoạt động" />
+                    </ListItem>
+                  </NavLink>
                 </List>
               </Collapse>
 
