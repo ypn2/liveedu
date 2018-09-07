@@ -10,11 +10,19 @@ use App\Notifications\PartnerRegistration;
 use App\Http\Entities\Channel;
 use App\Notifications\ActivePartner;
 use App\User;
-use DB;
+use DB,Eloquent;
 
-class Partner extends Model
+class Partner extends Eloquent
 {
     protected $table = '_liveedu_partners';
+
+    public function user(){
+      return $this->belongsTo('App\http\Entities\User');
+    }
+
+    public function course(){
+      return $this->hasMany('App\Http\Entities\Course');
+    }
 
     protected function register($data){
 
