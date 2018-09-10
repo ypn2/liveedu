@@ -20,6 +20,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import axios from 'axios';
+
+import Fade from '@material-ui/core/Fade';
 
 const styles = theme => ({
   root: {
@@ -63,6 +66,7 @@ class CourseComponent extends React.Component{
     super();
 
       this.state = {
+        show:true,
         anchorEl: null,
       };
     }
@@ -72,28 +76,46 @@ class CourseComponent extends React.Component{
       this.setState({ anchorEl: event.currentTarget });
     }
 
+    accepRegisteredCourse(){
+      this.setState({
+        show:false,
+        anchorEl: null
+      })
+      //this.props.removeMe();
+
+      // axios.post('/api/dahsboard/course/acceptRegisteredCourse',{
+      //
+      // })
+      // .then(function(response){
+      //   this.props.removeMe(response.data);
+      // }.bind(this))
+      // .catch(function(err){
+      //   console.log(err);
+      // });
+    }
+
 
     handleClose(){
         this.setState({ anchorEl: null });
     }
 
     render(){
-        const { classes ,theme  } = this.props;
-        const { anchorEl } = this.state;
+        const { classes ,theme ,object } = this.props;
+        const { anchorEl,show } = this.state;
         const openMenu = Boolean(anchorEl);
 
       return(
-
+        <Fade in={show} timeout={500}>
 
               <Card style={{display:'flex',borderRadius:0,padding:15,marginBottom:15}}>
-                <div style={{width:180,height:140,background:'#42a5f5',textAlign:'center'}}>
+                <div style={{width:180,height:140,background:'rgb(255, 87, 34)',textAlign:'center'}}>
                     <SchoolIcon style={{color:'rgba(0,0,0,0.55)',height:140,width:70}} />
                 </div>
                 <div style={{width:'100%',paddingLeft:15}}>
                   <div style={{height:140}}>
                     <div>
                       <h3 style={{marginTop:0,marginBottom:15,color:'#2C3E50'}}>
-                        Github Webhooks for Beginners
+                        {object.name}
                         <span className={classNames(classes.badges,classes.badgesDeactive)}>mới gửi đăng ký</span>
                          <IconButton  onClick={this.handleClick.bind(this)} style={{float:'right',top:-10,right:5}}>
                           <MoreVertIcon />
@@ -116,7 +138,7 @@ class CourseComponent extends React.Component{
                           },
                         }}
                       >
-                      <MenuItem onClick={this.handleClose.bind(this)}>Chấp nhận</MenuItem>
+                      <MenuItem onClick={this.accepRegisteredCourse.bind(this)}>Chấp nhận</MenuItem>
                       <MenuItem onClick={this.handleClose.bind(this)}>Từ chối</MenuItem>
                       <MenuItem onClick={this.handleClose.bind(this)}>Xem chi tiết</MenuItem>
                       </Menu>
@@ -138,18 +160,18 @@ class CourseComponent extends React.Component{
                         />
                       </div>
 
-                    <p style={{color:'#34495E',fontSize:15}}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto assumenda aut debitis, ducimus, ea eaque earum eius enim eos explicabo facilis harum impedit natus nemo, nobis obcaecati omnis perspiciatis praesentium quaerat quas quod reprehenderit sapiente temporibus vel voluptatem voluptates voluptatibus?</p>
+                    <p style={{color:'#34495E',fontSize:15}}>{object.description}</p>
                   </div>
                   <Divider/>
                   <div>
                     <ListItem>
                       <Avatar src="https://material-ui.com/static/images/remy.jpg"/>
-                      <ListItemText primary={<h4 style={{fontWeight:500,margin:0}}><a href="#" style={{color:'#42a5f5'}} >Phạm Như Ý</a></h4>} secondary={<label style={{color:'rgba(0,0,0,0.8)'}}>Lập trình viên</label>} />
+                      <ListItemText primary={<h4 style={{fontWeight:500,margin:0}}><a href="#" style={{color:'#42a5f5'}} >{object.partner_name}</a></h4>} secondary={<label style={{color:'rgba(0,0,0,0.8)'}}>{object.partner_current_job}</label>} />
                     </ListItem>
                   </div>
                 </div>
               </Card>
-
+          </Fade>
       )
 
     }

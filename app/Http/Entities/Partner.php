@@ -12,16 +12,16 @@ use App\Notifications\ActivePartner;
 use App\User;
 use DB,Eloquent;
 
-class Partner extends Eloquent
+class Partner extends Model
 {
     protected $table = '_liveedu_partners';
 
-    public function user(){
-      return $this->belongsTo('App\http\Entities\User');
+    protected function user(){
+      return $this->belongsTo('App\http\Entities\User','user_id');
     }
 
-    public function course(){
-      return $this->hasMany('App\Http\Entities\Course');
+    protected function course(){
+      return $this->hasMany('App\Http\Entities\Course','parner_id');
     }
 
     protected function register($data){

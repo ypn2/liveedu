@@ -47,9 +47,8 @@ class CourseController extends BaseController{
 
   //Lấy thông tin tất cả các khóa học đang trong trạng thái gửi đăng ký
   public function getNewCourses(){
-
     //các khóa học trọng trạng thái vừa gửi đăng ký chờ phê duyệt có trạng thái =0
-    return Course::getCourses(1);
+    return Course::getCourses(0);
   }
 
 }

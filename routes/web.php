@@ -58,6 +58,7 @@ Route::group(['middleware' => 'web', 'prefix' => 'api'], function () {
     Route::group(['middleware'=>'web','prefix'=>'dashboard'],function(){
       Route::group(['middleware'=>'web','prefix'=>'course'],function(){
         Route::post('get-new-courses','CourseController@getNewCourses');
+        Route::post('accept-regisered-course','CourseController@acceptRegisteredCourse');
       });
     });
 

@@ -9,13 +9,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use DB,Eloquent;
 
-class Course extends Eloquent
+use App\Http\Entities\Partner;
+
+class Course extends Model
 {
     protected $table = '_liveedu_course';
 
 
-    public function partner(){
-      return $this->belongsTo('App\http\Entities\Partner');
+    protected function partner(){
+      return $this->belongsTo('App\Http\Entities\Partner','partner_id');
     }
 
 
@@ -76,7 +78,14 @@ class Course extends Eloquent
 
     //Lấy danh sách tất cả các khóa học theo trạng thái
     protected function getCourses($status){
-      
+      $courses =  $this->where('active',$status)->get();
+
+      foreach($courses as $c){
+        $c->partner_current_job = $c->partner->current_job;
+        $c->partner_name = $c->partner->user->name;
+      }
+
+      return $courses;
     }
 
 }
