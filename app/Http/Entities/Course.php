@@ -7,11 +7,16 @@ use Illuminate\Database\Schema\Blueprint;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use DB;
+use DB,Eloquent;
 
-class Course extends Model
+class Course extends Eloquent
 {
     protected $table = '_liveedu_course';
+
+
+    public function partner(){
+      return $this->belongsTo('App\http\Entities\Partner');
+    }
 
 
     //Streammer partner gửi đăng ký khóa học mới.
@@ -67,6 +72,11 @@ class Course extends Model
 
       }
 
+    }
+
+    //Lấy danh sách tất cả các khóa học theo trạng thái
+    protected function getCourses($status){
+      
     }
 
 }

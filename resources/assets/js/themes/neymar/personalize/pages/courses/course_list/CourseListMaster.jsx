@@ -30,6 +30,8 @@ import Tab from '@material-ui/core/Tab';
 import SwipeableViews from 'react-swipeable-views';
 import Badge from '@material-ui/core/Badge';
 
+import ListNewCourse from './ListNewCourse';
+
 
 import CourseComponent from './CourseComponent';
 
@@ -148,46 +150,7 @@ class CourseList extends React.Component {
           index={this.state.tabValue}
           onChangeIndex={this.handleChangeIndex}
         >
-          <TabContainer >
-            <div className={classes.demo}>
-
-              <CourseComponent/>
-
-
-              <Card style={{display:'flex',borderRadius:0,padding:15}}>
-                <div style={{width:180,height:140,background:'rgb(255, 87, 34)',textAlign:'center'}}>
-                    <SchoolIcon style={{color:'rgba(0,0,0,0.55)',height:140,width:70}} />
-                </div>
-                <div style={{width:'100%',paddingLeft:15}}>
-                  <div style={{height:140}}>
-                    <h3 style={{marginTop:0,marginBottom:15,color:'#2C3E50'}}>Github Webhooks for Beginners <span  className={classNames(classes.badges,classes.badgesActive)}>sẵn sàng mở lớp</span></h3>
-
-                      <div>
-
-                        <Chip
-                          label="Lập trình"
-                          className={classes.chip}
-                          variant="outlined"
-                        />
-
-                        <Chip
-                          label="Thiết kế đồ họa"
-                          className={classes.chip}
-                          variant="outlined"
-                        />
-                      </div>
-
-                    <p style={{color:'#34495E',fontSize:15}}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto assumenda aut debitis, ducimus, ea eaque earum eius enim eos explicabo facilis harum impedit natus nemo, nobis obcaecati omnis perspiciatis praesentium quaerat quas quod reprehenderit sapiente temporibus vel voluptatem voluptates voluptatibus?</p>
-                  </div>
-                  <Divider/>
-                  <div style={{paddingTop:15}}>
-                    <label>Trạng thái:</label><span style={{color:'green'}}><b>Sẵn sàng</b></span>
-                  </div>
-                </div>
-              </Card>
-            </div>
-
-          </TabContainer>
+          <TabContainer ><ListNewCourse/></TabContainer>
           <TabContainer dir={theme.direction}>Item Two</TabContainer>
           <TabContainer dir={theme.direction}>Item Three</TabContainer>
         </SwipeableViews>
