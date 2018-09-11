@@ -68,7 +68,10 @@ const styles = theme => ({
   },
   padding: {
     padding: `0 ${theme.spacing.unit * 2}px`,
-  },
+    position: 'relative',
+    right: 15,
+    top: -8
+  }
 });
 
 function generate(element) {
@@ -96,12 +99,19 @@ class CourseList extends React.Component {
   constructor(){
     super();
     this.state = {
-      tabValue:0
+      tabValue:0,
+      totalNewCouse:null,
     };
   }
 
   handleChange(event, value){
     this.setState({ tabValue:value });
+  }
+
+  countCourse(total){
+    this.setState({
+      totalNewCouse:total
+    });
   }
 
 
@@ -123,23 +133,30 @@ class CourseList extends React.Component {
           >
            <Tab
               label={
-                <Badge className={classes.padding} color="secondary" badgeContent={4}>
-                  Đăng ký mới
-                </Badge>
+                <div>
+                Đăng ký mới
+                {
+                    this.state.totalNewCouse != null ? (
+                        <Badge className={classes.padding} color="secondary" badgeContent={this.state.totalNewCouse}/>
+                    ):null
+                  }
+                </div>
               }
             />
             <Tab
               label={
-                <Badge className={classes.padding} color="primary" badgeContent={15}>
-                  Đang diễn ra
-                </Badge>
+                <div>
+                    Đang diễn ra
+                    <Badge className={classes.padding} color="primary" badgeContent={15}/>
+                </div>
               }
             />
            <Tab
              label={
-               <Badge className={classes.padding} color="error" badgeContent={20}>
-                 Đã kết thúc
-               </Badge>
+               <div>
+                   Đã kết thúc
+                   <Badge className={classes.padding} color="primary" badgeContent={15}/>
+               </div>
              }
            />
 
@@ -150,7 +167,7 @@ class CourseList extends React.Component {
           index={this.state.tabValue}
           onChangeIndex={this.handleChangeIndex}
         >
-          <TabContainer ><ListNewCourse/></TabContainer>
+          <TabContainer ><ListNewCourse updateCourseCouter = {this.countCourse.bind(this)}/></TabContainer>
           <TabContainer dir={theme.direction}>Item Two</TabContainer>
           <TabContainer dir={theme.direction}>Item Three</TabContainer>
         </SwipeableViews>

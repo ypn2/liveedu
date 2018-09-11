@@ -51,6 +51,16 @@ class CourseController extends BaseController{
     return Course::getCourses(0);
   }
 
+  public function acceptRegisteredCourse(Request $request){
+    // $course_id = $request->course_id;
+    // $state = $request->state;
+
+    // return $request;
+    return Course::updateActivate($request);
+
+
+  }
+
 }
 
 ?>

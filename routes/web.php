@@ -52,13 +52,13 @@ Route::group(['middleware' => 'web', 'prefix' => 'api'], function () {
     });
 
     Route::group(['middleware'=>'web','prefix'=>'notification'],function(){
-      Route::post('get','NotificationController@get');
+      Route::post('get','NotificationController@get');    
     });
 
     Route::group(['middleware'=>'web','prefix'=>'dashboard'],function(){
       Route::group(['middleware'=>'web','prefix'=>'course'],function(){
         Route::post('get-new-courses','CourseController@getNewCourses');
-        Route::post('accept-regisered-course','CourseController@acceptRegisteredCourse');
+        Route::post('accept-registered-course','CourseController@acceptRegisteredCourse');
       });
     });
 

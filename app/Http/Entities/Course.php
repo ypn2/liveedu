@@ -7,7 +7,10 @@ use Illuminate\Database\Schema\Blueprint;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use App\User;
 use DB,Eloquent;
+
+use App\Notifications\AcceptNewRegisteredCourse;
 
 use App\Http\Entities\Partner;
 
@@ -83,9 +86,40 @@ class Course extends Model
       foreach($courses as $c){
         $c->partner_current_job = $c->partner->current_job;
         $c->partner_name = $c->partner->user->name;
+        $c->user_id = $c->partner->user->id;
       }
 
       return $courses;
+    }
+
+    protected function getProperties($properties,$course_id){
+      return $this->where('id',$course_id)->select($properties)->first();
+    }
+
+    //Quản trị viên chấp nhận kích hoạt khóa học mới.
+    protected function updateActivate($data){
+
+      try{
+          $this->where('id',$data->course_id)->update(['active'=>$data->state]);
+
+          $user = User::find($data->user_id);
+
+          $user->notify(new AcceptNewRegisteredCourse( ($this->getProperties(['name'],$data->course_id))->name  ));
+
+          return json_encode([
+            'code'=>200,
+            'message'=>'success',
+            'course_id'=>$data->course_id
+          ]);
+
+      }
+      catch(QueryException $ex){
+        return json_encode([
+          'code'=>301,
+          'message'=>'Lỗi chưa xác định'
+        ]);
+      }
+
     }
 
 }

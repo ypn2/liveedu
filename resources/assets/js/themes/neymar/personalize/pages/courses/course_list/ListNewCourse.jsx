@@ -8,14 +8,25 @@ export default class ListNewCourse extends React.Component{
   constructor(props){
     super(props);
     this.state= {
-      list:[]
+      list:null
     }
   }
 
-  removeItem(){
+  updateCount(){
+    const {list} = this.state;
+    this.props.updateCourseCouter(list.length)
+  }
+
+  removeItem(course_id){
+    _.remove(this.state.list,obj=>{
+      return obj.id == course_id;
+    });
+
     this.setState({
-      list:_.reject(this.state.list,{'id':3})
-    })
+      list:this.state.list
+    });
+
+    this.updateCount();
   }
 
   componentWillMount(){
@@ -24,6 +35,7 @@ export default class ListNewCourse extends React.Component{
       this.setState({
         list:response.data
       });
+      this.updateCount();
     }.bind(this))
     .catch(function(err){
 
@@ -33,13 +45,32 @@ export default class ListNewCourse extends React.Component{
   render(){
 
     const {list} = this.state;
+    const render = list == null ? <span>Đang tải...</span>
+    :(
+      <div>
+        {
+          list.length > 0 ? (
+            <div>
+              {
+                list.map((node)=>{
+                  return(
+                    <CourseComponent key={node.id} object={node} removeMe={this.removeItem.bind(this)} />
+                  )
+                })
+              }
+            </div>
+          ):<span>Không có khóa học nào!</span>
+        }
+      </div>
+    )
 
     return(
-        list.map((node,key)=>{
-          return(
-            <CourseComponent key={key} object={node} removeMe={this.removeItem.bind(this)}/>
-          )
-        })
+      <div>
+        {
+          render
+        }
+      </div>
+
     )
   }
 }

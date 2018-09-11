@@ -18,6 +18,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import logo from '../../../logo.svg';
 import Button from '@material-ui/core/Button';
+
+import CloseIcon from '@material-ui/icons/Close';
+
 import Icon from '@material-ui/core/Icon'
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
@@ -27,7 +30,9 @@ import Notifications from '@material-ui/icons/Notifications';
 import axios from 'axios';
 import Divider from '@material-ui/core/Divider';
 
+
 import * as ActionsLogin from '../../../actions/ActionsLogin';
+import renderHTML from 'react-render-html';
 
 
 import MainContent from './MainContent';
@@ -215,7 +220,15 @@ class FrontendMaster extends React.Component {
                 open={openMenuNoti}
                 onClose={this.handleCloseMenuNoti.bind(this)}
               >
-              <Typography style={{padding:5,outline:0}}>Thông báo</Typography><hr/>
+              <div style={{display:'inline-flex',width:'100%',outline:0}}>
+              <span style={{padding:'15px 10px 0px',outline:0,flex:1,fontWeight:600}}>Thông báo</span>
+
+              <IconButton aria-label="close" onClick={this.handleCloseMenuNoti.bind(this)}>
+                <CloseIcon />
+              </IconButton>
+
+              </div>
+              <hr style={{margin:0}}/>
 
                 {
                   notifications.length >  0 ? (
@@ -225,7 +238,7 @@ class FrontendMaster extends React.Component {
                           <div>
                             <ListItem>
                               <Avatar alt="Remy Sharp" src="http://pantheon-dev.ypn:8092/images/logo.svg" className={classes.avatar} />
-                              <ListItemText primary={notification.data.message} secondary="July 20, 2014" />
+                              <ListItemText primary={renderHTML(notification.data.message)} secondary="July 20, 2014" />
                             </ListItem>
                             <Divider light />
                           </div>
@@ -233,7 +246,9 @@ class FrontendMaster extends React.Component {
                       }
                     </List>
                   ):(
-                    <Typography>Không có thông báo nào</Typography>
+                    <div style={{padding:'15px 40px',outline:0}}>
+                      <Typography>Không có thông báo nào</Typography>
+                    </div>
                   )
                 }
 

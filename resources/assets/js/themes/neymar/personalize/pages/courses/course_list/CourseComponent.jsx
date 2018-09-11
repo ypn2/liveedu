@@ -76,22 +76,33 @@ class CourseComponent extends React.Component{
       this.setState({ anchorEl: event.currentTarget });
     }
 
-    accepRegisteredCourse(){
-      this.setState({
-        show:false,
-        anchorEl: null
-      })
-      //this.props.removeMe();
+    accepRegisteredCourse(course_id,user_id){
 
-      // axios.post('/api/dahsboard/course/acceptRegisteredCourse',{
-      //
-      // })
-      // .then(function(response){
-      //   this.props.removeMe(response.data);
-      // }.bind(this))
-      // .catch(function(err){
-      //   console.log(err);
-      // });
+      const _self = this;
+
+
+      axios.post('/api/dashboard/course/accept-registered-course',{
+        course_id,
+        user_id,
+        state:1
+      })
+      .then(function(response){
+        console.log(response.data);
+        if(response.data.code == 200){
+          _self.setState({
+            show:false,
+            anchorEl: null
+          })
+
+          setTimeout(function(){
+              _self.props.removeMe(course_id);
+          },500)
+
+        }
+      })
+      .catch(function(err){
+        console.log(err);
+      });
     }
 
 
@@ -138,7 +149,7 @@ class CourseComponent extends React.Component{
                           },
                         }}
                       >
-                      <MenuItem onClick={this.accepRegisteredCourse.bind(this)}>Chấp nhận</MenuItem>
+                      <MenuItem onClick={this.accepRegisteredCourse.bind(this,object.id,object.user_id)}>Chấp nhận</MenuItem>
                       <MenuItem onClick={this.handleClose.bind(this)}>Từ chối</MenuItem>
                       <MenuItem onClick={this.handleClose.bind(this)}>Xem chi tiết</MenuItem>
                       </Menu>
